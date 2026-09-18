@@ -1,37 +1,30 @@
 # movec-demos
 
-Alle movec-Produktpräsentationen und der interne Demo-Hub in **einem** Repo,
+Alle movec-Produktpräsentationen und der Demo-Hub in **einem** Repo,
 ausgeliefert als **eine** GitHub-Pages-Site.
 
-Vorher lag jede Seite in einem eigenen Repo unter einem privaten GitHub-Account.
-Das hatte drei Probleme: das Vertriebsmaterial gehörte einer Privatperson statt
-der Firma, GitHub Pages erlaubt nur *eine* Custom Domain pro Repo (12 Repos =
-12 DNS-Einträge), und seitenübergreifende CI-Änderungen mussten zwölfmal
-gepflegt werden.
+Vorher lag jede Seite in einem eigenen Repo. GitHub Pages erlaubt nur *eine*
+Custom Domain pro Repo (12 Repos = 12 DNS-Einträge), und seitenübergreifende
+CI-Änderungen mussten zwölfmal gepflegt werden.
 
 ## URL-Schema
 
-| Pfad | Inhalt | Zielgruppe |
-|---|---|---|
-| `/` | neutrale Seite, verlinkt nur movec.com | — |
-| `/hub/` | **Demo-Hub** – Einstieg für Vertrieb | **intern** |
-| `/motiondata/` | motionData | Kunde |
-| `/mates/` | MATES (Überblick über alle mates) | Kunde |
-| `/servmate/` | servMate | Kunde |
-| `/techmate/` | techMate | Kunde |
-| `/photomate/` | photoMate | Kunde |
-| `/partsmate/` | partsMate | Kunde |
-| `/tyremate/` | tyreMate | Kunde |
-| `/workshopassist/` | workshopAssist | Kunde |
-| `/connectapi/` | connectAPI | Kunde |
+| Pfad | Inhalt |
+|---|---|
+| `/` | neutrale Seite, verlinkt nur movec.com |
+| `/hub/` | Demo-Hub – Übersicht der Präsentationen und Demos |
+| `/motiondata/` | motionData |
+| `/mates/` | MATES (Überblick über alle mates) |
+| `/servmate/` | servMate |
+| `/techmate/` | techMate |
+| `/photomate/` | photoMate |
+| `/partsmate/` | partsMate |
+| `/tyremate/` | tyreMate |
+| `/workshopassist/` | workshopAssist |
+| `/connectapi/` | connectAPI |
 
-### Warum der Hub nicht auf der Root liegt
-
-Die Produktpräsentationen gehen als Link an Interessenten. Läge der Hub auf der
-Root, könnte jeder Empfänger den Pfad abschneiden und stünde im internen
-Vertriebswerkzeug. Unter `/hub/` lässt sich der Hub später außerdem **allein**
-hinter einen M365-Login legen, während die Präsentationen öffentlich bleiben –
-mit dem Hub auf der Root wäre das nicht möglich.
+Die Root ist absichtlich keine Übersichtsseite. Warum, steht in den internen
+Notizen neben diesem Repo.
 
 ## Aufbau
 
@@ -73,9 +66,8 @@ Wurzelrelative Pfade (`/techmate/`) würden im zweiten Fall brechen.
 Push auf `main` → GitHub Actions (`.github/workflows/deploy.yml`) → Pages.
 `.nojekyll` verhindert die Jekyll-Verarbeitung.
 
-Ziel-Domain und die geplante Absicherung des Hubs stehen in den internen
-Notizen neben diesem Repo (`../movec-demos-notizen/IT-TICKET.md`) — absichtlich
-nicht hier, weil dieses Repo öffentlich ist.
+Ziel-Domain und Betriebsdetails stehen in den internen Notizen neben diesem
+Repo (`../movec-demos-notizen/`) — nicht hier, weil dieses Repo öffentlich ist.
 
 ## Inhaltsquellen
 
@@ -87,12 +79,10 @@ in den internen Notizen neben diesem Repo
 
 ## Umzug der alten Einzel-Repos
 
-**Derzeit nicht nötig** — es sind keine Links im Umlauf, die alten Adressen sind
-nur dem Ersteller bekannt. Das Skript bleibt für den Fall, dass später Links
-verschickt wurden und sich die Adresse noch einmal ändert (z. B. bei der
-Umstellung auf die Custom Domain).
+Wird erst gebraucht, wenn sich eine bereits verschickte Adresse ändert — etwa
+bei der Umstellung auf die Custom Domain.
 
-Es zeigt auf die alten Repos
+Das Skript zeigt auf die alten Repos
 (`daku83.github.io/<produkt>-pitch/`). `scripts/make-redirects.mjs` legt dort
 eine Weiterleitungsseite auf die neue Adresse an:
 
