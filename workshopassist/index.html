@@ -1,0 +1,998 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>movec workshopAssist – Die ganze Werkstatt auf einen Blick.</title>
+<meta name="description" content="workshopAssist – der digitale Werkstatt-Leitstand: Live-Status aus der Halle, Disposition per Drag & Drop und ein KI-Planungs-Assistent. Die Führungssicht über techMate.">
+<meta property="og:title" content="movec workshopAssist – Die ganze Werkstatt auf einen Blick.">
+<meta property="og:description" content="Der digitale Werkstatt-Leitstand: Live-Status, Disposition per Drag & Drop und KI-gestützte Auftragszuteilung für die Werkstattleitung.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://daku83.github.io/workshopassist-pitch/">
+<meta property="og:locale" content="de_DE">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Ccircle%20cx='34'%20cy='26'%20r='17'%20fill='%2300AAA7'/%3E%3Ccircle%20cx='62'%20cy='62'%20r='22'%20fill='%23ED6B06'/%3E%3Ccircle%20cx='26'%20cy='88'%20r='11'%20fill='none'%20stroke='%2363656A'%20stroke-width='8'/%3E%3C/svg%3E">
+</head>
+<body class="l-de">
+<style>
+  /* =====================================================================
+     movec Pitch-Page Design-System — Tokens NICHT ändern, nur ergänzen.
+     ===================================================================== */
+  :root {
+    --orange:      #ED6B06;
+    --orange-dk:   #D45F04;
+    --orange-soft: rgba(237,107,6,.10);
+    --teal:        #00AAA7;
+    --teal-dk:     #00807E;
+    --teal-soft:   rgba(0,170,167,.10);
+    --grey-mark:   #63656A;
+
+    --paper:   #FFFFFF;
+    --paper-2: #F4F6F7;
+    --paper-3: #E9EDEF;
+    --ink:     #23282C;
+    --body:    #4C575F;
+    --muted:   #808C94;
+    --line:    #E3E8EA;
+    --line-2:  #D4DBDE;
+
+    --dark:   #0B2A2A;
+    --dark-2: #113838;
+    --dark-line: rgba(255,255,255,.11);
+    --dark-body: #B7C9C8;
+
+    --red: #C94B33;
+
+    --sans: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    --geo:  "Century Gothic", "Futura", "Segoe UI", system-ui, sans-serif;
+    --wrap: 1140px;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0; background: var(--paper); color: var(--body);
+    font-family: var(--sans); font-size: 18px; line-height: 1.65;
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+
+  .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 28px; }
+
+  h1, h2, h3 { text-wrap: balance; margin: 0; color: var(--ink); font-weight: 700; letter-spacing: -.02em; }
+  h1 { font-size: clamp(2.5rem, 6vw, 4.1rem); line-height: 1.04; letter-spacing: -.035em; font-weight: 800; }
+  h2 { font-size: clamp(1.85rem, 3.8vw, 3rem); line-height: 1.1; letter-spacing: -.03em; }
+  h3 { font-size: 1.24rem; letter-spacing: -.015em; }
+  p { margin: 0; }
+
+  .eyebrow {
+    font-size: .74rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--orange); margin: 0 0 18px; display: inline-flex; align-items: center; gap: 11px;
+  }
+  .eyebrow::before { content:""; width: 24px; height: 2px; background: var(--orange); border-radius: 2px; }
+
+  .lead { font-size: clamp(1.05rem, 1.7vw, 1.3rem); color: var(--body); line-height: 1.55; }
+  .tnum { font-variant-numeric: tabular-nums; }
+  .band { padding: clamp(78px, 11vh, 140px) 0; }
+  .pname { font-family: var(--geo); color: var(--grey-mark); }
+  .pname b { color: var(--orange); font-weight: 800; }
+
+  /* ---------- MEHRSPRACHIGKEIT (DE/EN/FR) ----------
+     Jeder sichtbare Text ist ein Span-Triplett .de/.en/.fr — body.l-* schaltet.
+     Default ist l-de (am <body>-Tag). Tripletts müssen exakt gepaart bleiben! */
+  body.l-de .en, body.l-de .fr,
+  body.l-en .de, body.l-en .fr,
+  body.l-fr .de, body.l-fr .en { display: none !important; }
+  .lang { display: flex; border: 1px solid var(--line-2); border-radius: 100px; overflow: hidden; }
+  .lang button { border: 0; background: transparent; font: inherit; font-size: .8rem; font-weight: 700; padding: 7px 13px; cursor: pointer; color: var(--body); }
+  .lang button.active { background: var(--ink); color: #fff; }
+
+  /* ---------- LOGO ---------- */
+  .logo { display: inline-flex; align-items: center; text-decoration: none; }
+  .logo .mark-full { display: block; }
+
+  /* ---------- NAV ---------- */
+  .nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,.88); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+  .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 74px; }
+  .nav .right { display: flex; align-items: center; gap: 22px; }
+  .nav .navlink { font-size: .92rem; font-weight: 600; color: var(--body); text-decoration: none; }
+  .nav .navlink:hover { color: var(--ink); }
+
+  /* ---------- HERO ---------- */
+  .hero { position: relative; padding: clamp(70px, 11vh, 130px) 0 clamp(60px, 9vh, 110px); overflow: hidden; }
+  .hero::before {
+    content:""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(70% 60% at 88% 4%, var(--teal-soft), transparent 60%),
+      radial-gradient(60% 55% at 96% 60%, var(--orange-soft), transparent 60%);
+  }
+  .hero .wrap { position: relative; z-index: 1; }
+  .hero-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 54px; align-items: center; }
+  .hero .lead { max-width: 52ch; margin-top: 24px; }
+  .fact-strip { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 40px; }
+  .fact { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 16px 20px; min-width: 128px; box-shadow: 0 10px 30px rgba(35,40,44,.05); }
+  .fact .n { font-size: 1.55rem; font-weight: 800; color: var(--ink); letter-spacing: -.02em; }
+  .fact .n.o { color: var(--orange); }
+  .fact .n.t { color: var(--teal-dk); }
+  .fact .l { font-size: .8rem; color: var(--muted); margin-top: 3px; }
+
+  /* Hero-Bühne: Live-Board-Mock als Inline-SVG */
+  .stage-card { background: var(--paper); border: 1px solid var(--line-2); border-radius: 14px; box-shadow: 0 24px 60px rgba(35,40,44,.14); overflow: hidden; }
+  .stage-card svg { display: block; width: 100%; height: auto; }
+  .stage-cap { font-size: .82rem; color: var(--muted); margin-top: 12px; text-align: center; }
+  @keyframes livepulse { 0%,100% { opacity: 1; } 50% { opacity: .25; } }
+  .live-dot { animation: livepulse 1.6s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce) { .live-dot { animation: none; } }
+
+  /* ---------- ZWEI-PANEL-SEKTION ---------- */
+  .expect { background: var(--paper-2); }
+  .expect .head { max-width: 62ch; margin-bottom: 50px; }
+  .expect-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+  .expect-grid.n3 { grid-template-columns: repeat(3,1fr); margin-top: 52px; }
+  .panel { border-radius: 14px; padding: 30px; height: 100%; background: var(--paper); border: 1px solid var(--line); }
+  .panel.hl { border-color: var(--teal); box-shadow: 0 14px 40px rgba(0,170,167,.10); }
+  .panel .who { font-size: .72rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; display: flex; align-items: center; gap: 9px; margin-bottom: 14px; }
+  .panel .who .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .panel.cust .who { color: var(--orange-dk); } .panel.cust .who .dot { background: var(--orange); }
+  .panel.biz  .who { color: var(--teal-dk); }   .panel.biz  .who .dot { background: var(--teal); }
+  .panel.gf   .who { color: var(--grey-mark); } .panel.gf   .who .dot { background: var(--grey-mark); }
+  .panel h3 { margin-bottom: 10px; }
+  .panel .note { color: var(--body); font-size: .96rem; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+  .chip { font-size: .78rem; font-weight: 600; letter-spacing: .02em; padding: 6px 13px; border-radius: 100px; border: 1px solid var(--line-2); color: var(--body); background: var(--paper-2); }
+  .panel.cust .chip { border-color: rgba(237,107,6,.35); color: var(--orange-dk); background: var(--orange-soft); }
+  .panel.biz  .chip { border-color: var(--teal); color: var(--teal-dk); background: var(--teal-soft); }
+  .bridge { margin-top: 44px; font-size: clamp(1.1rem, 1.9vw, 1.35rem); font-weight: 600; color: var(--ink); max-width: 60ch; }
+  .bridge b { color: var(--orange); }
+
+  /* ---------- DUNKLES BRAND-BAND ---------- */
+  .darkband { background: var(--dark); color: var(--dark-body); }
+  .darkband h2, .darkband h3 { color: #fff; }
+  .darkband .eyebrow { color: var(--teal); } .darkband .eyebrow::before { background: var(--teal); }
+  .darkband .head { max-width: 62ch; }
+  .darkband .lead { color: var(--dark-body); margin-top: 18px; }
+  .darkband .lead b { color: #fff; }
+  .vm-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 52px; }
+  .vm-card { background: var(--dark-2); border: 1px solid var(--dark-line); border-top: 3px solid var(--teal); border-radius: 14px; padding: 28px 26px; }
+  .vm-card.m2 { border-top-color: var(--orange); }
+  .vm-card .k { font-size: .7rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--teal); }
+  .vm-card.m2 .k { color: var(--orange); }
+  .vm-card p { font-size: 1.14rem; color: #DCE7E6; margin-top: 12px; font-weight: 600; line-height: 1.5; letter-spacing: -.01em; }
+  .vm-card ul { list-style: none; padding: 0; margin: 14px 0 0; display: flex; flex-direction: column; gap: 11px; }
+  .vm-card li { font-size: .96rem; color: var(--dark-body); padding-left: 24px; position: relative; line-height: 1.45; font-weight: 400; }
+  .vm-card li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--teal); font-weight: 700; }
+  .vm-card.m2 li::before { color: var(--orange); }
+  .vm-card li b { color: #fff; }
+
+  /* ---------- DREI-SCHICHTEN-ARCHITEKTUR ---------- */
+  .arch .head { max-width: 62ch; }
+  .layers { display: flex; flex-direction: column; gap: 0; margin-top: 52px; max-width: 860px; }
+  .layer { display: grid; grid-template-columns: 150px 1fr; gap: 24px; align-items: center; background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 26px 28px; }
+  .layer.l3 { border-left: 5px solid var(--orange); }
+  .layer.l2 { border-left: 5px solid var(--teal); border-color: var(--teal); box-shadow: 0 14px 40px rgba(0,170,167,.12); }
+  .layer.l1 { border-left: 5px solid var(--grey-mark); }
+  .layer .stufe { font-size: .7rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .layer.l3 .stufe { color: var(--orange-dk); }
+  .layer.l2 .stufe { color: var(--teal-dk); }
+  .layer .t { font-weight: 700; color: var(--ink); font-size: 1.08rem; }
+  .layer .d { font-size: .92rem; color: var(--body); margin-top: 3px; }
+  .layer .tag { display: inline-block; font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 3px 10px; border-radius: 100px; margin-top: 8px; }
+  .layer.l3 .tag { background: var(--orange-soft); color: var(--orange-dk); }
+  .layer.l2 .tag { background: var(--teal-soft); color: var(--teal-dk); }
+  .layer-gap { display: flex; justify-content: center; padding: 6px 0; color: var(--muted); }
+  .layer-gap svg { display: block; }
+  .arch-note { margin-top: 40px; font-size: clamp(1.05rem, 1.8vw, 1.25rem); font-weight: 600; color: var(--ink); max-width: 62ch; }
+  .arch-note b { color: var(--teal-dk); }
+
+  /* ---------- MODULKARTEN ---------- */
+  .modules { background: var(--paper-2); }
+  .modules .head { max-width: 62ch; }
+  .cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; margin-top: 52px; }
+  .pcard { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 30px 28px; display: flex; flex-direction: column; transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+  .pcard:hover { transform: translateY(-5px); box-shadow: 0 22px 48px rgba(35,40,44,.12); border-color: var(--orange); }
+  .pcard .role { font-size: .7rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--teal-dk); }
+  .pcard h3 { margin: 8px 0 2px; font-size: 1.3rem; }
+  .pcard .claim { font-weight: 700; color: var(--ink); font-size: 1.02rem; margin-top: 10px; letter-spacing: -.01em; }
+  .pcard ul { list-style: none; padding: 0; margin: 18px 0 0; display: flex; flex-direction: column; gap: 10px; }
+  .pcard li { font-size: .93rem; color: var(--body); padding-left: 22px; position: relative; line-height: 1.42; }
+  .pcard li::before { content:""; position: absolute; left: 0; top: .5em; width: 9px; height: 9px; border-radius: 2px; background: var(--teal); }
+  .pcard li b { color: var(--ink); }
+
+  /* ---------- KI-SCHRITTE ---------- */
+  .ki .head { max-width: 62ch; }
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 52px; }
+  .step { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 26px 24px; position: relative; }
+  .step .num { width: 38px; height: 38px; border-radius: 50%; background: var(--teal-soft); color: var(--teal-dk); font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 1.05rem; }
+  .step:last-child .num { background: var(--orange-soft); color: var(--orange-dk); }
+  .step .t { font-weight: 700; color: var(--ink); margin-top: 14px; font-size: 1.02rem; }
+  .step .d { font-size: .89rem; color: var(--body); margin-top: 5px; line-height: 1.45; }
+  .ki-foot { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; margin-top: 40px; align-items: stretch; }
+  .ki-constraints { background: var(--paper-2); border: 1px solid var(--line); border-radius: 14px; padding: 26px 28px; }
+  .ki-constraints .t { font-weight: 700; color: var(--ink); font-size: .98rem; margin-bottom: 12px; }
+  .ki-ausbau { background: var(--paper); border: 1px dashed var(--line-2); border-radius: 14px; padding: 26px 28px; }
+  .ki-ausbau .tagx { display: inline-block; font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 3px 10px; border-radius: 100px; background: var(--orange-soft); color: var(--orange-dk); margin-bottom: 10px; }
+  .ki-ausbau .t { font-weight: 700; color: var(--ink); font-size: .98rem; }
+  .ki-ausbau .d { font-size: .92rem; color: var(--body); margin-top: 6px; }
+
+  /* ---------- PRODUKT-FRAME (Plantafel-Mock) ---------- */
+  .produkt { background: var(--paper-2); }
+  .produkt .head { max-width: 62ch; }
+  .shot-frame { margin: 52px 0 0; border: 1px solid var(--line-2); border-radius: 14px; background: var(--paper); box-shadow: 0 24px 60px rgba(35,40,44,.12); overflow: hidden; }
+  .shot-frame .bar { display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: var(--paper-3); border-bottom: 1px solid var(--line-2); }
+  .shot-frame .wdot { width: 10px; height: 10px; border-radius: 50%; }
+  .shot-frame .wdot.t { background: var(--teal); }
+  .shot-frame .wdot.o { background: var(--orange); }
+  .shot-frame .wdot.g { background: var(--line-2); }
+  .shot-frame .bar .title { margin-left: 10px; font-size: .74rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--teal-dk); }
+  .shot-frame svg { display: block; width: 100%; height: auto; }
+  .shot-cap { text-align: center; color: var(--muted); font-size: .9rem; margin-top: 18px; }
+
+  /* ---------- MONITOR (Wand-TV-Mock) ---------- */
+  .monitor .head { max-width: 62ch; }
+  .tv { margin: 52px auto 0; max-width: 940px; background: #101418; border-radius: 18px; padding: 14px; box-shadow: 0 30px 80px rgba(35,40,44,.28); }
+  .tv svg { display: block; width: 100%; height: auto; border-radius: 8px; }
+  .tv-cap { text-align: center; color: var(--muted); font-size: .9rem; margin-top: 18px; }
+  .tv-chips { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+
+  /* ---------- CLOSING ---------- */
+  .closing { background: var(--dark); color: var(--dark-body); text-align: center; position: relative; overflow: hidden; }
+  .closing::before { content:""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(70% 100% at 50% 120%, rgba(237,107,6,.22), transparent 62%); }
+  .closing .wrap { position: relative; z-index: 1; }
+  .closing .eyebrow { color: var(--teal); justify-content: center; } .closing .eyebrow::before { background: var(--teal); }
+  .closing h2 { color: #fff; max-width: 22ch; margin: 0 auto; }
+  .closing .thesis { max-width: 56ch; margin: 24px auto 0; color: var(--dark-body); font-size: 1.14rem; }
+  .closing .thesis b { color: #fff; }
+
+  footer { background: var(--dark); border-top: 1px solid var(--dark-line); padding: 30px 0; }
+  footer .wrap { display: flex; justify-content: space-between; align-items: center; gap: 18px; flex-wrap: wrap; font-size: .8rem; color: #7E9695; }
+  footer .prods { font-weight: 600; }
+  footer a.legal { color: #9FB2B1; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,.2); }
+  footer a.legal:hover { color: #fff; border-color: var(--teal); }
+
+  /* ---------- PRÄSENTATION ---------- */
+  section { scroll-margin-top: 74px; }
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+  .dots { position: fixed; right: 18px; top: 50%; transform: translateY(-50%); z-index: 60; display: flex; flex-direction: column; gap: 10px; }
+  .dots button { width: 11px; height: 11px; border-radius: 50%; border: 2px solid var(--muted); background: transparent; cursor: pointer; padding: 0; position: relative; transition: transform .2s ease, background .2s ease, border-color .2s ease; }
+  .dots button:hover { border-color: var(--orange); transform: scale(1.25); }
+  .dots button.on { background: var(--orange); border-color: var(--orange); transform: scale(1.2); }
+  .dots button::after { content: attr(data-label); position: absolute; right: 22px; top: 50%; transform: translateY(-50%); white-space: nowrap; font-size: .72rem; font-weight: 600; color: #fff; background: var(--ink); padding: 4px 10px; border-radius: 6px; opacity: 0; pointer-events: none; transition: opacity .15s ease; }
+  .dots button:hover::after, .dots button:focus-visible::after { opacity: 1; }
+  .dots button:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+  .kbd-hint { position: fixed; left: 18px; bottom: 18px; z-index: 60; font-size: .75rem; font-weight: 600; color: var(--body); background: var(--paper); border: 1px solid var(--line-2); border-radius: 100px; padding: 8px 16px; box-shadow: 0 8px 24px rgba(35,40,44,.12); transition: opacity .8s ease; }
+  .kbd-hint.hide { opacity: 0; pointer-events: none; }
+  @media (max-width: 860px) { .dots, .kbd-hint { display: none; } }
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+  .reveal.d1 { transition-delay: .08s; } .reveal.d2 { transition-delay: .16s; } .reveal.d3 { transition-delay: .24s; }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 980px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+    .steps { grid-template-columns: repeat(2,1fr); }
+    .cards { grid-template-columns: repeat(2,1fr); }
+  }
+  @media (max-width: 860px) {
+    .expect-grid, .expect-grid.n3, .vm-cards, .ki-foot { grid-template-columns: 1fr; gap: 26px; }
+    .cards { grid-template-columns: 1fr; }
+    .nav .navlink { display: none; }
+    .layer { grid-template-columns: 1fr; gap: 8px; }
+  }
+  @media (max-width: 560px) {
+    .steps { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+  }
+</style>
+
+<!-- Offizielles movec-Logo (movec_logo_basic_bunt_grau.svg) als wiederverwendbares Symbol.
+     NIEMALS nachbauen. Graue Teile nutzen var(--lg), damit sie auf dunklem Grund
+     aufgehellt werden können: style="--lg:#C9D4D3" am <svg> setzen. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="mv-logo">
+      <path d="M313.946 255.011C307.442 261.909 299.815 267.242 291.022 271.012L358.509 355.387C365.013 348.249 371.717 342.635 380.308 337.782L313.946 255.011Z" fill="var(--lg,#63656A)"/>
+      <path d="M682.13 484V452.5H684.875L699.275 477.07H697.835L712.1 452.5H714.845V484H711.65V457.495H712.415L699.275 479.995H697.7L684.47 457.495H685.325V484H682.13ZM750.129 484.27C747.759 484.27 745.554 483.88 743.514 483.1C741.504 482.29 739.749 481.165 738.249 479.725C736.779 478.255 735.624 476.56 734.784 474.64C733.974 472.69 733.569 470.56 733.569 468.25C733.569 465.94 733.974 463.825 734.784 461.905C735.624 459.955 736.779 458.26 738.249 456.82C739.749 455.35 741.504 454.225 743.514 453.445C745.524 452.635 747.729 452.23 750.129 452.23C752.499 452.23 754.689 452.635 756.699 453.445C758.709 454.225 760.449 455.335 761.919 456.775C763.419 458.215 764.574 459.91 765.384 461.86C766.224 463.81 766.644 465.94 766.644 468.25C766.644 470.56 766.224 472.69 765.384 474.64C764.574 476.59 763.419 478.285 761.919 479.725C760.449 481.165 758.709 482.29 756.699 483.1C754.689 483.88 752.499 484.27 750.129 484.27ZM750.129 481.3C752.019 481.3 753.759 480.985 755.349 480.355C756.969 479.695 758.364 478.78 759.534 477.61C760.734 476.41 761.664 475.03 762.324 473.47C762.984 471.88 763.314 470.14 763.314 468.25C763.314 466.36 762.984 464.635 762.324 463.075C761.664 461.485 760.734 460.105 759.534 458.935C758.364 457.735 756.969 456.82 755.349 456.19C753.759 455.53 752.019 455.2 750.129 455.2C748.239 455.2 746.484 455.53 744.864 456.19C743.244 456.82 741.834 457.735 740.634 458.935C739.464 460.105 738.534 461.485 737.844 463.075C737.184 464.635 736.854 466.36 736.854 468.25C736.854 470.11 737.184 471.835 737.844 473.425C738.534 475.015 739.464 476.41 740.634 477.61C741.834 478.78 743.244 479.695 744.864 480.355C746.484 480.985 748.239 481.3 750.129 481.3ZM791.038 484V455.38H779.968V452.5H805.438V455.38H794.368V484H791.038ZM822.008 484V452.5H825.338V484H822.008ZM860.607 484.27C858.237 484.27 856.032 483.88 853.992 483.1C851.982 482.29 850.227 481.165 848.727 479.725C847.257 478.255 846.102 476.56 845.262 474.64C844.452 472.69 844.047 470.56 844.047 468.25C844.047 465.94 844.452 463.825 845.262 461.905C846.102 459.955 847.257 458.26 848.727 456.82C850.227 455.35 851.982 454.225 853.992 453.445C856.002 452.635 858.207 452.23 860.607 452.23C862.977 452.23 865.167 452.635 867.177 453.445C869.187 454.225 870.927 455.335 872.397 456.775C873.897 458.215 875.052 459.91 875.862 461.86C876.702 463.81 877.122 465.94 877.122 468.25C877.122 470.56 876.702 472.69 875.862 474.64C875.052 476.59 873.897 478.285 872.397 479.725C870.927 481.165 869.187 482.29 867.177 483.1C865.167 483.88 862.977 484.27 860.607 484.27ZM860.607 481.3C862.497 481.3 864.237 480.985 865.827 480.355C867.447 479.695 868.842 478.78 870.012 477.61C871.212 476.41 872.142 475.03 872.802 473.47C873.462 471.88 873.792 470.14 873.792 468.25C873.792 466.36 873.462 464.635 872.802 463.075C872.142 461.485 871.212 460.105 870.012 458.935C868.842 457.735 867.447 456.82 865.827 456.19C864.237 455.53 862.497 455.2 860.607 455.2C858.717 455.2 856.962 455.53 855.342 456.19C853.722 456.82 852.312 457.735 851.112 458.935C849.942 460.105 849.012 461.485 848.322 463.075C847.662 464.635 847.332 466.36 847.332 468.25C847.332 470.11 847.662 471.835 848.322 473.425C849.012 475.015 849.942 476.41 851.112 477.61C852.312 478.78 853.722 479.695 855.342 480.355C856.962 480.985 858.717 481.3 860.607 481.3ZM895.836 484V452.5H898.581L920.316 479.86H918.876V452.5H922.161V484H919.416L897.726 456.64H899.166V484H895.836ZM943.693 484V452.5H956.518C959.878 452.5 962.818 453.175 965.338 454.525C967.888 455.845 969.868 457.69 971.278 460.06C972.688 462.43 973.393 465.16 973.393 468.25C973.393 471.34 972.688 474.07 971.278 476.44C969.868 478.81 967.888 480.67 965.338 482.02C962.818 483.34 959.878 484 956.518 484H943.693ZM947.023 481.12H956.338C959.128 481.12 961.543 480.58 963.583 479.5C965.653 478.39 967.258 476.875 968.398 474.955C969.538 473.005 970.108 470.77 970.108 468.25C970.108 465.7 969.538 463.465 968.398 461.545C967.258 459.625 965.653 458.125 963.583 457.045C961.543 455.935 959.128 455.38 956.338 455.38H947.023V481.12ZM986.641 484L1001.04 452.5H1004.33L1018.73 484H1015.22L1001.99 454.435H1003.34L990.106 484H986.641ZM992.311 475.585L993.301 472.885H1011.62L1012.61 475.585H992.311ZM1039.72 484V455.38H1028.65V452.5H1054.12V455.38H1043.05V484H1039.72ZM1064.07 484L1078.47 452.5H1081.76L1096.16 484H1092.65L1079.42 454.435H1080.77L1067.54 484H1064.07ZM1069.74 475.585L1070.73 472.885H1089.05L1090.04 475.585H1069.74ZM1144.6 484L1130.65 452.5H1134.25L1147.3 482.155H1145.32L1158.46 452.5H1161.84L1147.89 484H1144.6ZM1180.63 466.585H1197.28V469.42H1180.63V466.585ZM1180.99 481.12H1199.93V484H1177.66V452.5H1199.26V455.38H1180.99V481.12ZM1232.6 484.27C1230.23 484.27 1228.04 483.88 1226.03 483.1C1224.02 482.29 1222.28 481.165 1220.81 479.725C1219.34 478.285 1218.19 476.59 1217.35 474.64C1216.54 472.69 1216.13 470.56 1216.13 468.25C1216.13 465.94 1216.54 463.81 1217.35 461.86C1218.19 459.91 1219.34 458.215 1220.81 456.775C1222.31 455.335 1224.07 454.225 1226.08 453.445C1228.09 452.635 1230.28 452.23 1232.65 452.23C1234.93 452.23 1237.07 452.62 1239.08 453.4C1241.09 454.15 1242.79 455.29 1244.17 456.82L1242.05 458.935C1240.76 457.615 1239.34 456.67 1237.78 456.1C1236.22 455.5 1234.54 455.2 1232.74 455.2C1230.85 455.2 1229.09 455.53 1227.47 456.19C1225.85 456.82 1224.44 457.735 1223.24 458.935C1222.04 460.105 1221.1 461.485 1220.41 463.075C1219.75 464.635 1219.42 466.36 1219.42 468.25C1219.42 470.14 1219.75 471.88 1220.41 473.47C1221.1 475.03 1222.04 476.41 1223.24 477.61C1224.44 478.78 1225.85 479.695 1227.47 480.355C1229.09 480.985 1230.85 481.3 1232.74 481.3C1234.54 481.3 1236.22 481 1237.78 480.4C1239.34 479.8 1240.76 478.84 1242.05 477.52L1244.17 479.635C1242.79 481.165 1241.09 482.32 1239.08 483.1C1237.07 483.88 1234.91 484.27 1232.6 484.27ZM1268.24 484V455.38H1257.17V452.5H1282.64V455.38H1271.57V484H1268.24ZM1312.54 484.27C1310.17 484.27 1307.97 483.88 1305.93 483.1C1303.92 482.29 1302.16 481.165 1300.66 479.725C1299.19 478.255 1298.04 476.56 1297.2 474.64C1296.39 472.69 1295.98 470.56 1295.98 468.25C1295.98 465.94 1296.39 463.825 1297.2 461.905C1298.04 459.955 1299.19 458.26 1300.66 456.82C1302.16 455.35 1303.92 454.225 1305.93 453.445C1307.94 452.635 1310.14 452.23 1312.54 452.23C1314.91 452.23 1317.1 452.635 1319.11 453.445C1321.12 454.225 1322.86 455.335 1324.33 456.775C1325.83 458.215 1326.99 459.91 1327.8 461.86C1328.64 463.81 1329.06 465.94 1329.06 468.25C1329.06 470.56 1328.64 472.69 1327.8 474.64C1326.99 476.59 1325.83 478.285 1324.33 479.725C1322.86 481.165 1321.12 482.29 1319.11 483.1C1317.1 483.88 1314.91 484.27 1312.54 484.27ZM1312.54 481.3C1314.43 481.3 1316.17 480.985 1317.76 480.355C1319.38 479.695 1320.78 478.78 1321.95 477.61C1323.15 476.41 1324.08 475.03 1324.74 473.47C1325.4 471.88 1325.73 470.14 1325.73 468.25C1325.73 466.36 1325.4 464.635 1324.74 463.075C1324.08 461.485 1323.15 460.105 1321.95 458.935C1320.78 457.735 1319.38 456.82 1317.76 456.19C1316.17 455.53 1314.43 455.2 1312.54 455.2C1310.65 455.2 1308.9 455.53 1307.28 456.19C1305.66 456.82 1304.25 457.735 1303.05 458.935C1301.88 460.105 1300.95 461.485 1300.26 463.075C1299.6 464.635 1299.27 466.36 1299.27 468.25C1299.27 470.11 1299.6 471.835 1300.26 473.425C1300.95 475.015 1301.88 476.41 1303.05 477.61C1304.25 478.78 1305.66 479.695 1307.28 480.355C1308.9 480.985 1310.65 481.3 1312.54 481.3ZM1347.77 484V452.5H1359.56C1362.23 452.5 1364.52 452.935 1366.44 453.805C1368.36 454.645 1369.83 455.875 1370.85 457.495C1371.9 459.085 1372.43 461.02 1372.43 463.3C1372.43 465.52 1371.9 467.44 1370.85 469.06C1369.83 470.65 1368.36 471.88 1366.44 472.75C1364.52 473.59 1362.23 474.01 1359.56 474.01H1349.61L1351.1 472.48V484H1347.77ZM1369.28 484L1361.18 472.57H1364.78L1372.92 484H1369.28ZM1351.1 472.75L1349.61 471.175H1359.47C1362.62 471.175 1365 470.485 1366.62 469.105C1368.27 467.725 1369.1 465.79 1369.1 463.3C1369.1 460.78 1368.27 458.83 1366.62 457.45C1365 456.07 1362.62 455.38 1359.47 455.38H1349.61L1351.1 453.805V472.75Z" fill="var(--lg,#63656A)"/>
+      <path d="M752.34 275.9C763.647 275.9 773.628 278.108 782.285 282.525C791.118 286.942 798.008 293.743 802.955 302.93C807.902 311.94 810.375 323.6 810.375 337.91V419H777.25V342.15C777.25 329.607 774.512 320.243 769.035 314.06C763.558 307.877 755.697 304.785 745.45 304.785C738.207 304.785 731.758 306.375 726.105 309.555C720.628 312.735 716.3 317.417 713.12 323.6C710.117 329.783 708.615 337.645 708.615 347.185V419H675.49V342.15C675.49 329.607 672.752 320.243 667.275 314.06C661.798 307.877 653.937 304.785 643.69 304.785C636.447 304.785 629.998 306.375 624.345 309.555C618.868 312.735 614.54 317.417 611.36 323.6C608.357 329.783 606.855 337.645 606.855 347.185V419H573.73V277.49H605.265V315.12L599.7 303.99C604.47 294.803 611.36 287.825 620.37 283.055C629.557 278.285 639.98 275.9 651.64 275.9C664.89 275.9 676.373 279.168 686.09 285.705C695.983 292.242 702.52 302.135 705.7 315.385L692.715 310.88C697.308 300.28 704.905 291.8 715.505 285.44C726.105 279.08 738.383 275.9 752.34 275.9ZM916.563 420.855C902.077 420.855 889.18 417.763 877.873 411.58C866.567 405.22 857.645 396.563 851.108 385.61C844.572 374.657 841.303 362.202 841.303 348.245C841.303 334.112 844.572 321.657 851.108 310.88C857.645 299.927 866.567 291.358 877.873 285.175C889.18 278.992 902.077 275.9 916.563 275.9C931.227 275.9 944.212 278.992 955.518 285.175C967.002 291.358 975.923 299.838 982.283 310.615C988.82 321.392 992.088 333.935 992.088 348.245C992.088 362.202 988.82 374.657 982.283 385.61C975.923 396.563 967.002 405.22 955.518 411.58C944.212 417.763 931.227 420.855 916.563 420.855ZM916.563 392.5C924.69 392.5 931.933 390.733 938.293 387.2C944.653 383.667 949.6 378.543 953.133 371.83C956.843 365.117 958.698 357.255 958.698 348.245C958.698 339.058 956.843 331.197 953.133 324.66C949.6 317.947 944.653 312.823 938.293 309.29C931.933 305.757 924.778 303.99 916.828 303.99C908.702 303.99 901.458 305.757 895.098 309.29C888.915 312.823 883.968 317.947 880.258 324.66C876.548 331.197 874.693 339.058 874.693 348.245C874.693 357.255 876.548 365.117 880.258 371.83C883.968 378.543 888.915 383.667 895.098 387.2C901.458 390.733 908.613 392.5 916.563 392.5ZM1057.51 419L996.827 277.49H1031.28L1083.48 402.305H1066.52L1120.58 277.49H1152.38L1091.7 419H1057.51ZM1235.72 420.855C1220 420.855 1206.22 417.763 1194.38 411.58C1182.72 405.22 1173.62 396.563 1167.08 385.61C1160.72 374.657 1157.54 362.202 1157.54 348.245C1157.54 334.112 1160.64 321.657 1166.82 310.88C1173.18 299.927 1181.84 291.358 1192.79 285.175C1203.92 278.992 1216.55 275.9 1230.68 275.9C1244.46 275.9 1256.74 278.903 1267.52 284.91C1278.3 290.917 1286.78 299.397 1292.96 310.35C1299.14 321.303 1302.23 334.2 1302.23 349.04C1302.23 350.453 1302.15 352.043 1301.97 353.81C1301.97 355.577 1301.88 357.255 1301.7 358.845H1183.78V336.85H1284.21L1271.23 343.74C1271.41 335.613 1269.73 328.458 1266.19 322.275C1262.66 316.092 1257.8 311.233 1251.62 307.7C1245.61 304.167 1238.63 302.4 1230.68 302.4C1222.56 302.4 1215.4 304.167 1209.22 307.7C1203.21 311.233 1198.44 316.18 1194.91 322.54C1191.55 328.723 1189.87 336.055 1189.87 344.535V349.835C1189.87 358.315 1191.82 365.823 1195.7 372.36C1199.59 378.897 1205.07 383.932 1212.13 387.465C1219.2 390.998 1227.33 392.765 1236.51 392.765C1244.46 392.765 1251.62 391.528 1257.98 389.055C1264.34 386.582 1269.99 382.695 1274.94 377.395L1292.69 397.8C1286.33 405.22 1278.3 410.962 1268.58 415.025C1259.04 418.912 1248.09 420.855 1235.72 420.855ZM1398.98 420.855C1384.14 420.855 1370.89 417.763 1359.23 411.58C1347.74 405.22 1338.73 396.563 1332.2 385.61C1325.66 374.657 1322.39 362.202 1322.39 348.245C1322.39 334.112 1325.66 321.657 1332.2 310.88C1338.73 299.927 1347.74 291.358 1359.23 285.175C1370.89 278.992 1384.14 275.9 1398.98 275.9C1412.76 275.9 1424.86 278.727 1435.28 284.38C1445.88 289.857 1453.92 297.983 1459.4 308.76L1433.96 323.6C1429.72 316.887 1424.51 311.94 1418.32 308.76C1412.32 305.58 1405.78 303.99 1398.71 303.99C1390.59 303.99 1383.25 305.757 1376.72 309.29C1370.18 312.823 1365.06 317.947 1361.35 324.66C1357.64 331.197 1355.78 339.058 1355.78 348.245C1355.78 357.432 1357.64 365.382 1361.35 372.095C1365.06 378.632 1370.18 383.667 1376.72 387.2C1383.25 390.733 1390.59 392.5 1398.71 392.5C1405.78 392.5 1412.32 390.91 1418.32 387.73C1424.51 384.55 1429.72 379.603 1433.96 372.89L1459.4 387.73C1453.92 398.33 1445.88 406.545 1435.28 412.375C1424.86 418.028 1412.76 420.855 1398.98 420.855Z" fill="var(--lg,#63656A)"/>
+      <path d="M420.816 493.139C466.668 493.139 503.839 456.009 503.839 410.207C503.839 364.405 466.668 327.276 420.816 327.276C374.964 327.276 337.793 364.405 337.793 410.207C337.793 456.009 374.964 493.139 420.816 493.139Z" fill="#ED6B06"/>
+      <path d="M264.566 276.386C301.926 276.386 332.213 246.132 332.213 208.813C332.213 171.494 301.926 141.241 264.566 141.241C227.206 141.241 196.919 171.494 196.919 208.813C196.919 246.132 227.206 276.386 264.566 276.386Z" fill="#00AAA7"/>
+      <path d="M240.558 461.498C239.956 461.699 239.314 461.498 238.993 460.977C227.109 443.412 207.036 431.823 184.233 431.863C149.104 431.943 119.356 460.857 118.352 495.906C117.308 533.201 147.258 563.759 184.353 563.759C221.448 563.759 250.354 534.244 250.354 497.831C250.354 495.024 249.953 492.297 249.551 489.57C249.471 488.928 249.832 488.287 250.434 488.086L348.713 451.433C344.257 443.212 341.045 434.55 339.078 425.125L240.518 461.498H240.558ZM221.007 506.453C217.916 520.248 206.755 531.397 192.944 534.485C165.524 540.58 141.517 516.599 147.659 489.249C150.75 475.454 161.911 464.306 175.722 461.218C203.142 455.122 227.149 479.103 221.007 506.453Z" fill="var(--lg,#63656A)"/>
+    </g>
+  </defs>
+</svg>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="movec — MotionData Vector">
+      <svg class="mark-full" viewBox="110 134 1360 440" width="136" height="44" role="img"><use href="#mv-logo"/></svg>
+    </a>
+    <div class="right">
+      <a class="navlink" href="#module"><span class="de">Module</span><span class="en">Modules</span><span class="fr">Modules</span></a>
+      <a class="navlink" href="#ki"><span class="de">KI-Planung</span><span class="en">AI planning</span><span class="fr">Planification IA</span></a>
+      <a class="navlink" href="#technologie"><span class="de">Technologie</span><span class="en">Technology</span><span class="fr">Technologie</span></a>
+      <div class="lang" role="group" aria-label="Sprache / Language / Langue">
+        <button type="button" data-lang="de" class="active" aria-pressed="true">DE</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+        <button type="button" data-lang="fr" aria-pressed="false">FR</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ 1 · HERO ============ -->
+<section class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow reveal"><span class="de">Werkstatt-Leitstand · movec MATES</span><span class="en">Workshop control center · movec MATES</span><span class="fr">Poste de pilotage atelier · movec MATES</span></p>
+        <h1 class="reveal d1"><span class="pname">workshop<b>Assist</b></span>.<br><span class="de">Die ganze Werkstatt<br>auf einen Blick.</span><span class="en">The whole workshop<br>at a glance.</span><span class="fr">Tout l'atelier<br>en un coup d'œil.</span></h1>
+        <p class="lead reveal d2"><span class="de">Der digitale Leitstand für Serviceleitung und Werkstattmeister: Live-Status aus der Halle, Disposition per Drag &amp; Drop und ein KI-Assistent, der die Auftragszuteilung vorschlägt.</span><span class="en">The digital control center for service managers and workshop foremen: live status from the shop floor, drag-and-drop dispatching and an AI assistant that suggests the job allocation.</span><span class="fr">Le poste de pilotage numérique pour les responsables service et les chefs d'atelier : statut en direct de l'atelier, dispatching par glisser-déposer et un assistant IA qui propose l'affectation des travaux.</span></p>
+        <div class="fact-strip reveal d3">
+          <div class="fact"><div class="n o tnum" data-count="5">5</div><div class="l"><span class="de">Module in einer App</span><span class="en">modules in one app</span><span class="fr">modules dans une seule app</span></div></div>
+          <div class="fact"><div class="n t tnum" data-count="3">3</div><div class="l"><span class="de">Schichten-Architektur</span><span class="en">layer architecture</span><span class="fr">couches d'architecture</span></div></div>
+          <div class="fact"><div class="n tnum" data-count="2">2</div><div class="l"><span class="de">DMS-Cores über connectAPI</span><span class="en">DMS cores via connectAPI</span><span class="fr">cœurs DMS via connectAPI</span></div></div>
+        </div>
+      </div>
+      <div class="reveal d2">
+        <div class="stage-card" role="img" aria-label="workshopAssist Live-Board (Illustration)">
+          <svg viewBox="0 0 620 470" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, system-ui, sans-serif">
+            <rect width="620" height="470" fill="#FFFFFF"/>
+            <!-- Kopfzeile -->
+            <rect width="620" height="54" fill="#F4F6F7"/>
+            <line x1="0" y1="54" x2="620" y2="54" stroke="#E3E8EA"/>
+            <text x="24" y="34" font-size="15" font-weight="700" fill="#23282C"><tspan class="de">Live-Board · Standort Graz</tspan><tspan class="en">Live board · Graz site</tspan><tspan class="fr">Live board · Site de Graz</tspan></text>
+            <circle class="live-dot" cx="530" cy="28" r="5" fill="#ED6B06"/>
+            <text x="544" y="33" font-size="12" font-weight="700" fill="#ED6B06">LIVE</text>
+            <!-- KPI-Chips -->
+            <g font-size="12">
+              <rect x="24" y="72" rx="9" width="150" height="52" fill="#FFFFFF" stroke="#E3E8EA"/>
+              <text x="40" y="95" font-size="17" font-weight="800" fill="#00807E">87 %</text>
+              <text x="40" y="113" fill="#808C94"><tspan class="de">Auslastung jetzt</tspan><tspan class="en">Utilisation now</tspan><tspan class="fr">Charge actuelle</tspan></text>
+              <rect x="186" y="72" rx="9" width="150" height="52" fill="#FFFFFF" stroke="#E3E8EA"/>
+              <text x="202" y="95" font-size="17" font-weight="800" fill="#23282C">14/16</text>
+              <text x="202" y="113" fill="#808C94"><tspan class="de">Techniker anwesend</tspan><tspan class="en">technicians present</tspan><tspan class="fr">techniciens présents</tspan></text>
+              <rect x="348" y="72" rx="9" width="150" height="52" fill="#FFF4EA" stroke="#ED6B06"/>
+              <text x="364" y="95" font-size="17" font-weight="800" fill="#D45F04">3</text>
+              <text x="364" y="113" fill="#D45F04"><tspan class="de">warten auf Teile</tspan><tspan class="en">waiting for parts</tspan><tspan class="fr">en attente de pièces</tspan></text>
+            </g>
+            <!-- Techniker-Zeilen -->
+            <g font-size="12.5">
+              <text x="24" y="163" font-size="11" font-weight="700" letter-spacing="1.5" fill="#808C94"><tspan class="de">TECHNIKER · AKTIVER AUFTRAG</tspan><tspan class="en">TECHNICIAN · ACTIVE ORDER</tspan><tspan class="fr">TECHNICIEN · ORDRE ACTIF</tspan></text>
+              <!-- Zeile 1 -->
+              <text x="24" y="192" font-weight="600" fill="#23282C">Muster</text>
+              <rect x="120" y="178" rx="6" width="300" height="20" fill="#00AAA7"/>
+              <text x="132" y="192" fill="#FFFFFF" font-weight="600"><tspan class="de">AT-2417 · Bremsen VA</tspan><tspan class="en">AT-2417 · Front brakes</tspan><tspan class="fr">AT-2417 · Freins AV</tspan></text>
+              <rect x="428" y="178" rx="6" width="70" height="20" fill="#E9EDEF"/>
+              <text x="512" y="192" fill="#808C94"><tspan class="de">noch 0:40</tspan><tspan class="en">0:40 left</tspan><tspan class="fr">reste 0:40</tspan></text>
+              <!-- Zeile 2 -->
+              <text x="24" y="226" font-weight="600" fill="#23282C">Berger</text>
+              <rect x="120" y="212" rx="6" width="220" height="20" fill="#00AAA7"/>
+              <text x="132" y="226" fill="#FFFFFF" font-weight="600">AT-2391 · §57a</text>
+              <rect x="348" y="212" rx="6" width="150" height="20" fill="#E9EDEF"/>
+              <text x="512" y="226" fill="#808C94"><tspan class="de">noch 1:10</tspan><tspan class="en">1:10 left</tspan><tspan class="fr">reste 1:10</tspan></text>
+              <!-- Zeile 3: wartet -->
+              <text x="24" y="260" font-weight="600" fill="#23282C">Steiner</text>
+              <rect x="120" y="246" rx="6" width="180" height="20" fill="#ED6B06"/>
+              <text x="132" y="260" fill="#FFFFFF" font-weight="600"><tspan class="de">AT-2402 · Teile fehlen</tspan><tspan class="en">AT-2402 · parts missing</tspan><tspan class="fr">AT-2402 · pièces manquantes</tspan></text>
+              <rect x="308" y="246" rx="6" width="190" height="20" fill="#E9EDEF"/>
+              <text x="512" y="260" fill="#D45F04" font-weight="600"><tspan class="de">blockiert</tspan><tspan class="en">blocked</tspan><tspan class="fr">bloqué</tspan></text>
+              <!-- Zeile 4 -->
+              <text x="24" y="294" font-weight="600" fill="#23282C">Wolf</text>
+              <rect x="120" y="280" rx="6" width="378" height="20" fill="#00AAA7"/>
+              <text x="132" y="294" fill="#FFFFFF" font-weight="600"><tspan class="de">AT-2419 · Service 60.000 km</tspan><tspan class="en">AT-2419 · 60,000 km service</tspan><tspan class="fr">AT-2419 · Révision 60 000 km</tspan></text>
+              <text x="512" y="294" fill="#808C94"><tspan class="de">noch 2:25</tspan><tspan class="en">2:25 left</tspan><tspan class="fr">reste 2:25</tspan></text>
+              <!-- Zeile 5: frei -->
+              <text x="24" y="328" font-weight="600" fill="#23282C">Egger</text>
+              <rect x="120" y="314" rx="6" width="378" height="20" fill="#E9EDEF" stroke="#00AAA7" stroke-dasharray="5 4"/>
+              <text x="132" y="328" fill="#00807E" font-weight="600"><tspan class="de">frei ab 13:30 · HV-qualifiziert</tspan><tspan class="en">free from 13:30 · HV-qualified</tspan><tspan class="fr">libre dès 13 h 30 · qualifié HV</tspan></text>
+              <text x="512" y="328" fill="#00807E" font-weight="600"><tspan class="de">frei</tspan><tspan class="en">free</tspan><tspan class="fr">libre</tspan></text>
+            </g>
+            <!-- Arbeitsplatz-Auslastung -->
+            <g font-size="12">
+              <text x="24" y="374" font-size="11" font-weight="700" letter-spacing="1.5" fill="#808C94"><tspan class="de">ARBEITSPLATZ-AUSLASTUNG</tspan><tspan class="en">BAY UTILISATION</tspan><tspan class="fr">CHARGE DES POSTES</tspan></text>
+              <text x="24" y="401" fill="#4C575F"><tspan class="de">Bühne 1</tspan><tspan class="en">Lift 1</tspan><tspan class="fr">Pont 1</tspan></text>
+              <rect x="120" y="390" rx="5" width="378" height="12" fill="#E9EDEF"/>
+              <rect x="120" y="390" rx="5" width="340" height="12" fill="#00AAA7"/>
+              <text x="24" y="428" fill="#4C575F"><tspan class="de">Bühne 2</tspan><tspan class="en">Lift 2</tspan><tspan class="fr">Pont 2</tspan></text>
+              <rect x="120" y="417" rx="5" width="378" height="12" fill="#E9EDEF"/>
+              <rect x="120" y="417" rx="5" width="220" height="12" fill="#00AAA7"/>
+              <text x="24" y="455" fill="#4C575F"><tspan class="de">Direktannahme</tspan><tspan class="en">Direct check-in</tspan><tspan class="fr">Réception directe</tspan></text>
+              <rect x="120" y="444" rx="5" width="378" height="12" fill="#E9EDEF"/>
+              <rect x="120" y="444" rx="5" width="110" height="12" fill="#ED6B06"/>
+            </g>
+          </svg>
+        </div>
+        <p class="stage-cap"><span class="de">Illustrative Darstellung mit Beispieldaten.</span><span class="en">Illustration with sample data.</span><span class="fr">Illustration avec des données d'exemple.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2 · PROBLEM ============ -->
+<section class="band expect" id="problem">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow reveal"><span class="de">Das Problem</span><span class="en">The problem</span><span class="fr">Le problème</span></p>
+      <h2 class="reveal d1"><span class="de">Der Plan kennt das Soll.<br>Die Halle lebt im Ist.</span><span class="en">The plan knows the target.<br>The shop floor lives in the now.</span><span class="fr">Le planning connaît le prévu.<br>L'atelier vit dans le réel.</span></h2>
+    </div>
+    <div class="expect-grid">
+      <div class="panel cust reveal">
+        <p class="who"><span class="dot"></span><span class="de">Heute</span><span class="en">Today</span><span class="fr">Aujourd'hui</span></p>
+        <h3><span class="de">Magnettafel &amp; Terminplaner</span><span class="en">Magnetic board &amp; scheduler</span><span class="fr">Tableau magnétique &amp; planning</span></h3>
+        <p class="note"><span class="de">Der Terminplaner zeigt die Soll-Planung des Tages — was tatsächlich in der Halle passiert, steht auf einer Magnettafel oder in niemandes Sicht: Wer arbeitet gerade woran? Wie lange noch? Welcher Auftrag hängt?</span><span class="en">The scheduler shows the day's target plan — what actually happens in the shop lives on a magnetic board or in nobody's view: Who is working on what right now? For how much longer? Which order is stuck?</span><span class="fr">Le planning affiche le prévisionnel de la journée — ce qui se passe réellement dans l'atelier vit sur un tableau magnétique ou n'est visible nulle part : qui travaille sur quoi en ce moment ? Pour combien de temps encore ? Quel ordre est bloqué ?</span></p>
+        <div class="chips"><span class="chip"><span class="de">veraltet</span><span class="en">outdated</span><span class="fr">obsolète</span></span><span class="chip"><span class="de">manuell gepflegt</span><span class="en">maintained by hand</span><span class="fr">tenu à la main</span></span><span class="chip"><span class="de">nur ein Ort</span><span class="en">one place only</span><span class="fr">un seul endroit</span></span></div>
+      </div>
+      <div class="panel biz hl reveal d1">
+        <p class="who"><span class="dot"></span><span class="de">Die Folge</span><span class="en">The consequence</span><span class="fr">La conséquence</span></p>
+        <h3><span class="de">Führung ohne Echtzeitbild</span><span class="en">Managing without a real-time picture</span><span class="fr">Diriger sans image en temps réel</span></h3>
+        <p class="note"><span class="de">Serviceleiter und Werkstattmeister steuern den wertvollsten Engpass des Betriebs — die Werkstattstunde — auf Basis von Zuruf und Erfahrung. Engpässe, freie Kapazität und blockierte Aufträge werden zu spät sichtbar.</span><span class="en">Service managers and foremen steer the business's most valuable bottleneck — the workshop hour — based on shouts across the shop and gut feeling. Bottlenecks, free capacity and blocked orders surface too late.</span><span class="fr">Responsables service et chefs d'atelier pilotent la ressource la plus précieuse de l'entreprise — l'heure d'atelier — à l'instinct et à la volée. Goulots, capacité libre et ordres bloqués n'apparaissent que trop tard.</span></p>
+        <div class="chips"><span class="chip"><span class="de">Engpässe zu spät erkannt</span><span class="en">bottlenecks spotted too late</span><span class="fr">goulots détectés trop tard</span></span><span class="chip"><span class="de">Kapazität verschenkt</span><span class="en">capacity wasted</span><span class="fr">capacité gaspillée</span></span><span class="chip"><span class="de">Aufträge hängen unbemerkt</span><span class="en">orders stuck unnoticed</span><span class="fr">ordres bloqués sans alerte</span></span></div>
+      </div>
+    </div>
+    <p class="bridge reveal"><span class="pname">workshop<b>Assist</b></span> <span class="de">macht das Ist sichtbar — <b>in Echtzeit</b>, für die ganze Werkstatt.</span><span class="en">makes the actual state visible — <b>in real time</b>, for the entire workshop.</span><span class="fr">rend le réel visible — <b>en temps réel</b>, pour tout l'atelier.</span></p>
+  </div>
+</section>
+
+<!-- ============ 3 · WARUM MOVEC (dunkel) ============ -->
+<section class="band darkband" id="warum">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow reveal"><span class="de">Warum movec</span><span class="en">Why movec</span><span class="fr">Pourquoi movec</span></p>
+      <h2 class="reveal d1"><span class="de">Diesen Leitstand kann kein OEM bauen.</span><span class="en">No OEM can build this control center.</span><span class="fr">Aucun constructeur ne peut créer ce poste de pilotage.</span></h2>
+      <p class="lead reveal d2"><span class="de">Ein Hersteller sieht immer nur die eigene Marke. Die Mehrmarken-Werkstatt braucht aber <b>ein vollständiges Kapazitätsbild</b> — über alle Marken, Mechaniker, Aufträge und Zeiten hinweg.</span><span class="en">A manufacturer only ever sees its own brand. A multi-brand workshop needs <b>one complete capacity picture</b> — across all brands, mechanics, orders and hours.</span><span class="fr">Un constructeur ne voit jamais que sa propre marque. L'atelier multimarque a besoin d'<b>une image de capacité complète</b> — toutes marques, tous mécaniciens, tous ordres et toutes heures confondus.</span></p>
+    </div>
+    <div class="vm-cards">
+      <div class="vm-card reveal">
+        <p class="k"><span class="de">Die OEM-Sicht</span><span class="en">The OEM view</span><span class="fr">La vue constructeur</span></p>
+        <p><span class="de">Jede Herstellerlösung endet an der Markengrenze.</span><span class="en">Every manufacturer solution stops at the brand boundary.</span><span class="fr">Chaque solution constructeur s'arrête à la frontière de la marque.</span></p>
+        <ul>
+          <li><span class="de">Sieht nur die <b>eigenen Fahrzeuge</b> und Aufträge</span><span class="en">Sees only its <b>own vehicles</b> and orders</span><span class="fr">Ne voit que <b>ses propres véhicules</b> et ordres</span></li>
+          <li><span class="de">Kennt weder Gesamtauslastung noch freie Kapazität</span><span class="en">Knows neither total utilisation nor free capacity</span><span class="fr">Ignore la charge globale comme la capacité libre</span></li>
+          <li><span class="de">Kann die Mehrmarken-Werkstatt nicht steuern</span><span class="en">Cannot steer the multi-brand workshop</span><span class="fr">Ne peut pas piloter l'atelier multimarque</span></li>
+        </ul>
+      </div>
+      <div class="vm-card m2 reveal d1">
+        <p class="k"><span class="de">Die movec-Sicht</span><span class="en">The movec view</span><span class="fr">La vue movec</span></p>
+        <p><span class="de">Als DMS-Anbieter sieht movec die ganze Werkstatt.</span><span class="en">As the DMS provider, movec sees the whole workshop.</span><span class="fr">En tant qu'éditeur du DMS, movec voit tout l'atelier.</span></p>
+        <ul>
+          <li><span class="de"><b>Alle Marken, alle Mechaniker, alle Aufträge</b> in einem System</span><span class="en"><b>All brands, all mechanics, all orders</b> in one system</span><span class="fr"><b>Toutes les marques, tous les mécaniciens, tous les ordres</b> dans un seul système</span></li>
+          <li><span class="de">Soll-Planung und Ist-Zeiten aus einer Datenquelle</span><span class="en">Target plan and actual times from a single data source</span><span class="fr">Planification et temps réels issus d'une seule source de données</span></li>
+          <li><span class="de">Ein struktureller Vorsprung, den nur das DMS liefern kann</span><span class="en">A structural advantage only the DMS can deliver</span><span class="fr">Un avantage structurel que seul le DMS peut offrir</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4 · DREI SCHICHTEN ============ -->
+<section class="band arch" id="architektur">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow reveal"><span class="de">Architektur</span><span class="en">Architecture</span><span class="fr">Architecture</span></p>
+      <h2 class="reveal d1"><span class="de">Drei Schichten, ein System.</span><span class="en">Three layers, one system.</span><span class="fr">Trois couches, un système.</span></h2>
+      <p class="lead reveal d2" style="margin-top:18px"><span class="de">Vom Live-Signal an der Hebebühne bis zum KI-Vorschlag: Jede Schicht baut auf der darunter auf.</span><span class="en">From the live signal at the lift to the AI suggestion: each layer builds on the one below.</span><span class="fr">Du signal en direct au pont élévateur jusqu'à la proposition de l'IA : chaque couche s'appuie sur la précédente.</span></p>
+    </div>
+    <div class="layers">
+      <div class="layer l3 reveal">
+        <div>
+          <p class="stufe"><span class="de">Schicht 3</span><span class="en">Layer 3</span><span class="fr">Couche 3</span></p>
+          <span class="tag"><span class="de">Ausbaustufe</span><span class="en">Expansion stage</span><span class="fr">Étape d'extension</span></span>
+        </div>
+        <div>
+          <p class="t"><span class="de">KI-Auslastungsoptimierung</span><span class="en">AI utilisation optimisation</span><span class="fr">Optimisation de la charge par IA</span></p>
+          <p class="d"><span class="de">Zuteilungsvorschläge und Auslastungsprognose — die KI denkt mit, der Meister entscheidet.</span><span class="en">Allocation suggestions and utilisation forecast — the AI thinks along, the foreman decides.</span><span class="fr">Propositions d'affectation et prévision de charge — l'IA réfléchit, le chef d'atelier décide.</span></p>
+        </div>
+      </div>
+      <div class="layer-gap reveal" aria-hidden="true"><svg width="20" height="16" viewBox="0 0 20 16"><path d="M10 0v12M4 8l6 6 6-6" fill="none" stroke="#808C94" stroke-width="2"/></svg></div>
+      <div class="layer l2 reveal d1">
+        <div>
+          <p class="stufe"><span class="de">Schicht 2</span><span class="en">Layer 2</span><span class="fr">Couche 2</span></p>
+          <span class="tag">workshopAssist</span>
+        </div>
+        <div>
+          <p class="t"><span class="de">Der Leitstand — Echtzeit-Führungssicht</span><span class="en">The control center — real-time management view</span><span class="fr">Le poste de pilotage — vue de direction en temps réel</span></p>
+          <p class="d"><span class="de">Live-Board, Disposition, Plantafel, Zeiten und Werkstatt-Monitor für Serviceleitung und Meister.</span><span class="en">Live board, dispatching, planning board, times and workshop monitor for service management and foremen.</span><span class="fr">Tableau live, dispatching, tableau de planification, temps et moniteur d'atelier pour la direction du service et les chefs d'atelier.</span></p>
+        </div>
+      </div>
+      <div class="layer-gap reveal d1" aria-hidden="true"><svg width="20" height="16" viewBox="0 0 20 16"><path d="M10 0v12M4 8l6 6 6-6" fill="none" stroke="#808C94" stroke-width="2"/></svg></div>
+      <div class="layer l1 reveal d2">
+        <div>
+          <p class="stufe"><span class="de">Schicht 1</span><span class="en">Layer 1</span><span class="fr">Couche 1</span></p>
+        </div>
+        <div>
+          <p class="t"><span class="pname">tech<b>Mate</b></span> — <span class="de">der Datensensor</span><span class="en">the data sensor</span><span class="fr">le capteur de données</span></p>
+          <p class="d"><span class="de">Live-Stempelung direkt an der Hebebühne: Job-Status, Zeiten und Blocker entstehen dort, wo gearbeitet wird.</span><span class="en">Live clock-ins right at the lift: job status, times and blockers originate where the work happens.</span><span class="fr">Pointage en direct au pont élévateur : statuts, temps et blocages naissent là où le travail se fait.</span></p>
+        </div>
+      </div>
+    </div>
+    <p class="arch-note reveal"><span class="de">techMate ist keine Konkurrenz zum Leitstand — <b>es ist der Sensor, der ihn möglich macht.</b> workshopAssist disponiert, techMate arbeitet ab.</span><span class="en">techMate does not compete with the control center — <b>it is the sensor that makes it possible.</b> workshopAssist dispatches, techMate executes.</span><span class="fr">techMate ne concurrence pas le poste de pilotage — <b>c'est le capteur qui le rend possible.</b> workshopAssist planifie, techMate exécute.</span></p>
+  </div>
+</section>
+
+<!-- ============ 5 · MODULE ============ -->
+<section class="band modules" id="module">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow reveal"><span class="de">Die Module</span><span class="en">The modules</span><span class="fr">Les modules</span></p>
+      <h2 class="reveal d1"><span class="de">Fünf Sichten auf eine Werkstatt.</span><span class="en">Five views of one workshop.</span><span class="fr">Cinq vues sur un même atelier.</span></h2>
+    </div>
+    <div class="cards">
+      <div class="pcard reveal">
+        <p class="role"><span class="de">Überblick</span><span class="en">Overview</span><span class="fr">Vue d'ensemble</span></p>
+        <h3><span class="de">Live-Board</span><span class="en">Live board</span><span class="fr">Live board</span></h3>
+        <p class="claim"><span class="de">Der Puls der Halle — auf einen Blick.</span><span class="en">The pulse of the shop floor — at a glance.</span><span class="fr">Le pouls de l'atelier — en un coup d'œil.</span></p>
+        <ul>
+          <li><span class="de"><b>Echtzeit-KPIs</b> — Auslastung, Anwesenheit, blockierte Aufträge</span><span class="en"><b>Real-time KPIs</b> — utilisation, attendance, blocked orders</span><span class="fr"><b>KPI en temps réel</b> — charge, présence, ordres bloqués</span></li>
+          <li><span class="de">Arbeitsplatz-Auslastung standortweit</span><span class="en">Bay utilisation across the site</span><span class="fr">Charge des postes de travail sur tout le site</span></li>
+          <li><span class="de">Hängende Aufträge sofort sichtbar</span><span class="en">Stuck orders visible immediately</span><span class="fr">Ordres bloqués immédiatement visibles</span></li>
+        </ul>
+      </div>
+      <div class="pcard reveal d1">
+        <p class="role"><span class="de">Steuern</span><span class="en">Steering</span><span class="fr">Pilotage</span></p>
+        <h3><span class="de">Disposition &amp; Plantafel</span><span class="en">Dispatch &amp; planning board</span><span class="fr">Dispatching &amp; tableau de planification</span></h3>
+        <p class="claim"><span class="de">Die Magnettafel — digital und lebendig.</span><span class="en">The magnetic board — digital and alive.</span><span class="fr">Le tableau magnétique — numérique et vivant.</span></p>
+        <ul>
+          <li><span class="de"><b>Liste oder Zeitachse</b> — eine Disposition, zwei Ansichten</span><span class="en"><b>List or timeline</b> — one dispatch view, two perspectives</span><span class="fr"><b>Liste ou chronologie</b> — un dispatching, deux vues</span></li>
+          <li><span class="de">Zuteilung per <b>Drag &amp; Drop</b>, nach Technikern oder Arbeitsplätzen</span><span class="en">Allocation via <b>drag &amp; drop</b>, by technician or bay</span><span class="fr">Affectation par <b>glisser-déposer</b>, par technicien ou poste de travail</span></li>
+          <li><span class="de">Job-Split: ein Auftrag, mehrere Techniker</span><span class="en">Job split: one order, several technicians</span><span class="fr">Job-Split : un ordre, plusieurs techniciens</span></li>
+        </ul>
+      </div>
+      <div class="pcard reveal d2">
+        <p class="role"><span class="de">Optimieren</span><span class="en">Optimising</span><span class="fr">Optimisation</span></p>
+        <h3><span class="de">KI-Planungs-Assistent</span><span class="en">AI planning assistant</span><span class="fr">Assistant de planification IA</span></h3>
+        <p class="claim"><span class="de">Schlägt die beste Zuteilung vor.</span><span class="en">Suggests the best allocation.</span><span class="fr">Propose la meilleure affectation.</span></p>
+        <ul>
+          <li><span class="de">Mathematisch optimale <b>Auftrag-zu-Techniker-Zuordnung</b></span><span class="en">Mathematically optimal <b>order-to-technician assignment</b></span><span class="fr">Affectation <b>ordre-technicien</b> mathématiquement optimale</span></li>
+          <li><span class="de">Berücksichtigt Auslastung und Qualifikation</span><span class="en">Considers utilisation and qualifications</span><span class="fr">Tient compte de la charge et des qualifications</span></li>
+          <li><span class="de">Jeder Vorschlag mit Begründung — der Meister entscheidet</span><span class="en">Every suggestion comes with a rationale — the foreman decides</span><span class="fr">Chaque proposition est justifiée — le chef d'atelier décide</span></li>
+        </ul>
+      </div>
+      <div class="pcard reveal">
+        <p class="role"><span class="de">Zeitwirtschaft</span><span class="en">Time management</span><span class="fr">Gestion des temps</span></p>
+        <h3><span class="de">Zeiten &amp; Anwesenheit</span><span class="en">Times &amp; attendance</span><span class="fr">Temps &amp; présence</span></h3>
+        <p class="claim"><span class="de">Soll und Ist im Vergleich.</span><span class="en">Target versus actual.</span><span class="fr">Prévu et réel comparés.</span></p>
+        <ul>
+          <li><span class="de">Soll/Ist-Zeitvergleich je Mitarbeiter</span><span class="en">Target/actual time comparison per employee</span><span class="fr">Comparaison temps prévu/réel par collaborateur</span></li>
+          <li><span class="de">Ansichten <b>Tag, Woche, Monat</b> — Team oder alle</span><span class="en"><b>Day, week and month</b> views — team or everyone</span><span class="fr">Vues <b>jour, semaine, mois</b> — équipe ou tous</span></li>
+          <li><span class="de">Anwesenheit, produktive Zeiten, Abwesenheiten</span><span class="en">Attendance, productive hours, absences</span><span class="fr">Présence, temps productifs, absences</span></li>
+        </ul>
+      </div>
+      <div class="pcard reveal d1">
+        <p class="role"><span class="de">Transparenz</span><span class="en">Transparency</span><span class="fr">Transparence</span></p>
+        <h3><span class="de">Werkstatt-Monitor</span><span class="en">Workshop monitor</span><span class="fr">Moniteur d'atelier</span></h3>
+        <p class="claim"><span class="de">Die digitale Magnettafel für die Wand.</span><span class="en">The digital magnetic board for the wall.</span><span class="fr">Le tableau magnétique numérique pour le mur.</span></p>
+        <ul>
+          <li><span class="de">Kiosk-Modus für den <b>Werkstatt-TV</b>, automatischer Rundgang</span><span class="en">Kiosk mode for the <b>workshop TV</b>, automatic tour</span><span class="fr">Mode kiosque pour <b>l'écran d'atelier</b>, rotation automatique</span></li>
+          <li><span class="de">Ohne Kundennamen — Datenschutz eingebaut</span><span class="en">No customer names — privacy built in</span><span class="fr">Sans noms de clients — protection des données intégrée</span></li>
+          <li><span class="de">Auslastung ohne Personen-Ranking — Mitbestimmung eingebaut</span><span class="en">Utilisation without ranking individuals — co-determination built in</span><span class="fr">Charge sans classement individuel — dialogue social respecté</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6 · KI-PLANUNG ============ -->
+<section class="band ki" id="ki">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow reveal"><span class="de">KI-Planung</span><span class="en">AI planning</span><span class="fr">Planification IA</span></p>
+      <h2 class="reveal d1"><span class="de">Die KI schlägt vor.<br>Der Meister entscheidet.</span><span class="en">The AI suggests.<br>The foreman decides.</span><span class="fr">L'IA propose.<br>Le chef d'atelier décide.</span></h2>
+      <p class="lead reveal d2" style="margin-top:18px"><span class="de">Der Planungs-Assistent verteilt offene Aufträge mathematisch optimal auf die verfügbaren Techniker — nachvollziehbar statt Blackbox.</span><span class="en">The planning assistant distributes open orders across available technicians in a mathematically optimal way — transparent instead of a black box.</span><span class="fr">L'assistant de planification répartit les ordres ouverts sur les techniciens disponibles de façon mathématiquement optimale — transparent plutôt que boîte noire.</span></p>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="num">1</div>
+        <p class="t"><span class="de">Analysieren</span><span class="en">Analyse</span><span class="fr">Analyser</span></p>
+        <p class="d"><span class="de">Der Assistent liest offene Aufträge, Auslastung und Qualifikationen des gewählten Teams und Tages.</span><span class="en">The assistant reads open orders, utilisation and qualifications for the selected team and day.</span><span class="fr">L'assistant lit les ordres ouverts, la charge et les qualifications de l'équipe et du jour choisis.</span></p>
+      </div>
+      <div class="step reveal d1">
+        <div class="num">2</div>
+        <p class="t"><span class="de">Vorschlagen</span><span class="en">Suggest</span><span class="fr">Proposer</span></p>
+        <p class="d"><span class="de">Er berechnet die optimale Zuteilung und legt einen Plan vor — jede Zuordnung mit Begründung.</span><span class="en">It computes the optimal allocation and presents a plan — every assignment with a rationale.</span><span class="fr">Il calcule l'affectation optimale et présente un plan — chaque attribution est justifiée.</span></p>
+      </div>
+      <div class="step reveal d2">
+        <div class="num">3</div>
+        <p class="t"><span class="de">Prüfen</span><span class="en">Review</span><span class="fr">Vérifier</span></p>
+        <p class="d"><span class="de">Der Meister sieht jeden Vorschlag einzeln und wählt ab, was nicht passt. Nichts passiert automatisch.</span><span class="en">The foreman reviews each suggestion individually and deselects what doesn't fit. Nothing happens automatically.</span><span class="fr">Le chef d'atelier examine chaque proposition et écarte ce qui ne convient pas. Rien ne se fait automatiquement.</span></p>
+      </div>
+      <div class="step reveal d3">
+        <div class="num">4</div>
+        <p class="t"><span class="de">Ausführen</span><span class="en">Execute</span><span class="fr">Exécuter</span></p>
+        <p class="d"><span class="de">Ein Klick übernimmt den geprüften Plan in die Disposition — fertig verteilt in Sekunden.</span><span class="en">One click applies the reviewed plan to the dispatch board — fully allocated in seconds.</span><span class="fr">Un clic applique le plan validé au dispatching — tout est réparti en quelques secondes.</span></p>
+      </div>
+    </div>
+    <div class="ki-foot">
+      <div class="ki-constraints reveal">
+        <p class="t"><span class="de">Was der Assistent berücksichtigt</span><span class="en">What the assistant takes into account</span><span class="fr">Ce que l'assistant prend en compte</span></p>
+        <div class="chips" style="margin-top:6px">
+          <span class="chip"><span class="de">Auslastung je Techniker</span><span class="en">Utilisation per technician</span><span class="fr">Charge par technicien</span></span>
+          <span class="chip"><span class="de">Qualifikationen</span><span class="en">Qualifications</span><span class="fr">Qualifications</span></span>
+          <span class="chip"><span class="de">Überbuchungsschutz</span><span class="en">Overbooking protection</span><span class="fr">Protection contre la surréservation</span></span>
+          <span class="chip"><span class="de">Priorität &amp; Fälligkeit</span><span class="en">Priority &amp; due date</span><span class="fr">Priorité &amp; échéance</span></span>
+        </div>
+      </div>
+      <div class="ki-ausbau reveal d1">
+        <span class="tagx"><span class="de">In Planung</span><span class="en">Planned</span><span class="fr">En projet</span></span>
+        <p class="t"><span class="de">Ausbaustufe: Auslastungsprognose</span><span class="en">Expansion stage: utilisation forecast</span><span class="fr">Étape d'extension : prévision de charge</span></p>
+        <p class="d"><span class="de">Vorschau auf Tag und Woche aus Soll-Planung und Ist-Geschwindigkeit — Engpässe erkennen, bevor sie entstehen.</span><span class="en">A preview of the day and week from target plan and actual pace — spot bottlenecks before they happen.</span><span class="fr">Aperçu du jour et de la semaine à partir du prévisionnel et du rythme réel — détecter les goulots avant qu'ils n'apparaissent.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7 · PRODUKT (Plantafel) ============ -->
+<section class="band produkt" id="produkt">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow reveal"><span class="de">Das Produkt</span><span class="en">The product</span><span class="fr">Le produit</span></p>
+      <h2 class="reveal d1"><span class="de">Die Plantafel: disponieren wie am Whiteboard — nur live.</span><span class="en">The planning board: dispatch like on a whiteboard — but live.</span><span class="fr">Le tableau de planification : organiser comme sur un tableau blanc — mais en direct.</span></h2>
+    </div>
+    <div class="shot-frame reveal d1">
+      <div class="bar" aria-hidden="true">
+        <span class="wdot t"></span><span class="wdot o"></span><span class="wdot g"></span>
+        <span class="title"><span class="de">workshopAssist · Disposition · Zeitachse</span><span class="en">workshopAssist · Dispatch · Timeline</span><span class="fr">workshopAssist · Dispatching · Chronologie</span></span>
+      </div>
+      <svg viewBox="0 0 1080 440" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, system-ui, sans-serif" role="img" aria-label="workshopAssist Plantafel (Illustration)">
+        <rect width="1080" height="440" fill="#FFFFFF"/>
+        <!-- Zeitachse -->
+        <g font-size="12" fill="#808C94">
+          <text x="150" y="30">07:00</text><text x="330" y="30">09:00</text><text x="510" y="30">11:00</text><text x="690" y="30">13:00</text><text x="870" y="30">15:00</text><text x="1030" y="30">17:00</text>
+        </g>
+        <g stroke="#E9EDEF">
+          <line x1="160" y1="42" x2="160" y2="420"/><line x1="340" y1="42" x2="340" y2="420"/><line x1="520" y1="42" x2="520" y2="420"/><line x1="700" y1="42" x2="700" y2="420"/><line x1="880" y1="42" x2="880" y2="420"/><line x1="1040" y1="42" x2="1040" y2="420"/>
+        </g>
+        <!-- Mittagspause -->
+        <rect x="610" y="42" width="45" height="378" fill="#F4F6F7"/>
+        <text x="632" y="230" font-size="10" fill="#808C94" text-anchor="middle" transform="rotate(-90 632 230)"><tspan class="de">Pause 12:00–12:30</tspan><tspan class="en">Break 12:00–12:30</tspan><tspan class="fr">Pause 12 h – 12 h 30</tspan></text>
+        <!-- Zeilen -->
+        <g font-size="13" font-weight="600" fill="#23282C">
+          <text x="24" y="88">Muster</text>
+          <text x="24" y="158">Berger</text>
+          <text x="24" y="228">Steiner</text>
+          <text x="24" y="298">Wolf</text>
+          <text x="24" y="368">Egger</text>
+        </g>
+        <g stroke="#E3E8EA"><line x1="0" y1="112" x2="1080" y2="112"/><line x1="0" y1="182" x2="1080" y2="182"/><line x1="0" y1="252" x2="1080" y2="252"/><line x1="0" y1="322" x2="1080" y2="322"/></g>
+        <!-- Blöcke -->
+        <g font-size="12" font-weight="600">
+          <rect x="205" y="66" rx="7" width="240" height="34" fill="#00AAA7"/><text x="218" y="88" fill="#FFFFFF"><tspan class="de">AT-2417 · Bremsen VA</tspan><tspan class="en">AT-2417 · Front brakes</tspan><tspan class="fr">AT-2417 · Freins AV</tspan></text>
+          <rect x="455" y="66" rx="7" width="140" height="34" fill="#00AAA7" opacity=".75"/><text x="468" y="88" fill="#FFFFFF">AT-2421</text>
+          <rect x="205" y="136" rx="7" width="180" height="34" fill="#00AAA7"/><text x="218" y="158" fill="#FFFFFF">AT-2391 · §57a</text>
+          <rect x="665" y="136" rx="7" width="240" height="34" fill="#00AAA7" opacity=".75"/><text x="688" y="158" fill="#FFFFFF"><tspan class="de">AT-2424 · Klimaservice</tspan><tspan class="en">AT-2424 · A/C service</tspan><tspan class="fr">AT-2424 · Service clim</tspan></text>
+          <rect x="205" y="206" rx="7" width="200" height="34" fill="#ED6B06"/><text x="218" y="228" fill="#FFFFFF"><tspan class="de">AT-2402 · Teile fehlen</tspan><tspan class="en">AT-2402 · parts missing</tspan><tspan class="fr">AT-2402 · pièces manquantes</tspan></text>
+          <rect x="205" y="276" rx="7" width="430" height="34" fill="#00AAA7"/><text x="218" y="298" fill="#FFFFFF"><tspan class="de">AT-2419 · Service 60.000 km</tspan><tspan class="en">AT-2419 · 60,000 km service</tspan><tspan class="fr">AT-2419 · Révision 60 000 km</tspan></text>
+          <!-- Job-Split (gestrichelt) -->
+          <rect x="655" y="276" rx="7" width="160" height="34" fill="#FFFFFF" stroke="#00AAA7" stroke-width="2" stroke-dasharray="6 4"/><text x="668" y="298" fill="#00807E">AT-2419 · Job 2 ⑃</text>
+          <rect x="455" y="346" rx="7" width="160" height="34" fill="#FFFFFF" stroke="#00AAA7" stroke-width="2" stroke-dasharray="6 4"/><text x="468" y="368" fill="#00807E">AT-2419 · Job 3 ⑃</text>
+          <!-- Drag-Ghost -->
+          <g opacity=".9">
+            <rect x="700" y="200" rx="7" width="190" height="34" fill="#FFFFFF" stroke="#ED6B06" stroke-width="2"/>
+            <text x="713" y="222" fill="#D45F04">AT-2402 → 13:30</text>
+            <path d="M790 246l14 26 7-10 12 5-6-13 11-4z" fill="#23282C"/>
+          </g>
+        </g>
+        <!-- Kapazitätslinie -->
+        <line x1="960" y1="42" x2="960" y2="420" stroke="#ED6B06" stroke-dasharray="4 5"/>
+        <text x="968" y="416" font-size="10" fill="#D45F04"><tspan class="de">Kapazität</tspan><tspan class="en">Capacity</tspan><tspan class="fr">Capacité</tspan></text>
+      </svg>
+    </div>
+    <p class="shot-cap"><span class="de">Illustrative Darstellung mit Beispieldaten — der klickbare Prototyp mit allen fünf Modulen liegt vor und wird live präsentiert.</span><span class="en">Illustration with sample data — the clickable prototype with all five modules exists and is presented live.</span><span class="fr">Illustration avec des données d'exemple — le prototype cliquable avec les cinq modules existe et se présente en direct.</span></p>
+  </div>
+</section>
+
+<!-- ============ 8 · MONITOR (Wand-TV) ============ -->
+<section class="band monitor" id="monitor">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow reveal"><span class="de">Der Monitor</span><span class="en">The monitor</span><span class="fr">Le moniteur</span></p>
+      <h2 class="reveal d1"><span class="de">Ein Blick an die Wand genügt.</span><span class="en">One glance at the wall is enough.</span><span class="fr">Un coup d'œil au mur suffit.</span></h2>
+      <p class="lead reveal d2" style="margin-top:18px"><span class="de">Der Werkstatt-Monitor bringt den Leitstand als Kiosk-Ansicht auf den Werkstatt-TV — mit automatischem Rundgang durch Techniker und Arbeitsplätze. Die ganze Halle sieht denselben Stand.</span><span class="en">The workshop monitor brings the control center to the workshop TV as a kiosk view — with an automatic tour across technicians and bays. The whole shop floor sees the same picture.</span><span class="fr">Le moniteur d'atelier affiche le poste de pilotage sur l'écran de l'atelier en mode kiosque — avec une rotation automatique entre techniciens et postes de travail. Tout l'atelier voit la même situation.</span></p>
+    </div>
+    <div class="tv reveal d1">
+      <svg viewBox="0 0 1080 600" xmlns="http://www.w3.org/2000/svg" font-family="Roboto, Segoe UI, system-ui, sans-serif" role="img" aria-label="workshopAssist Werkstatt-Monitor (Illustration)">
+        <!-- movec-mates-App-Style: mint BG #F4FBF9, Header #EFF5F4, Teal primär -->
+        <rect width="1080" height="600" fill="#F4FBF9"/>
+        <!-- Kopfzeile -->
+        <rect width="1080" height="96" fill="#EFF5F4"/>
+        <line x1="0" y1="96" x2="1080" y2="96" stroke="#e3efec"/>
+        <text x="36" y="52" font-size="22" font-weight="700" fill="#1f2329"><tspan class="de">Werkstatt-Monitor · Standort Graz</tspan><tspan class="en">Workshop monitor · Graz site</tspan><tspan class="fr">Moniteur d'atelier · Site de Graz</tspan></text>
+        <circle class="live-dot" cx="36" cy="76" r="5" fill="#ED6B06"/>
+        <text x="50" y="81" font-size="13" font-weight="700" fill="#ED6B06">LIVE</text>
+        <text x="1044" y="56" font-size="34" font-weight="800" fill="#1f2329" text-anchor="end" font-variant-numeric="tabular-nums">10:42</text>
+        <text x="1044" y="82" font-size="14" fill="#63656a" text-anchor="end"><tspan class="de">Mittwoch, 10.06.2026</tspan><tspan class="en">Wednesday, 10 Jun 2026</tspan><tspan class="fr">Mercredi 10.06.2026</tspan></text>
+        <!-- Techniker-Kacheln (2 × 3), weiße Cards, Radius 12, teal-getönte Border -->
+        <g>
+          <!-- Kachel 1: Muster -->
+          <rect x="36" y="112" rx="12" width="324" height="170" fill="#FFFFFF" stroke="#e3efec"/>
+          <text x="60" y="152" font-size="19" font-weight="700" fill="#1f2329">Muster</text>
+          <rect x="60" y="168" rx="12" width="86" height="24" fill="#e6f7f6"/>
+          <text x="70" y="185" font-size="12" font-weight="700" fill="#007977"><tspan class="de">In Arbeit</tspan><tspan class="en">In progress</tspan><tspan class="fr">En cours</tspan></text>
+          <text x="60" y="222" font-size="14" fill="#63656a"><tspan class="de">AT-2417 · Bremsen VA</tspan><tspan class="en">AT-2417 · Front brakes</tspan><tspan class="fr">AT-2417 · Freins AV</tspan></text>
+          <rect x="60" y="240" rx="5" width="276" height="10" fill="#e3efec"/>
+          <rect x="60" y="240" rx="5" width="207" height="10" fill="#00AAA7"/>
+          <!-- Kachel 2: Berger -->
+          <rect x="378" y="112" rx="12" width="324" height="170" fill="#FFFFFF" stroke="#e3efec"/>
+          <text x="402" y="152" font-size="19" font-weight="700" fill="#1f2329">Berger</text>
+          <rect x="402" y="168" rx="12" width="86" height="24" fill="#e6f7f6"/>
+          <text x="412" y="185" font-size="12" font-weight="700" fill="#007977"><tspan class="de">In Arbeit</tspan><tspan class="en">In progress</tspan><tspan class="fr">En cours</tspan></text>
+          <text x="402" y="222" font-size="14" fill="#63656a">AT-2391 · §57a</text>
+          <rect x="402" y="240" rx="5" width="276" height="10" fill="#e3efec"/>
+          <rect x="402" y="240" rx="5" width="110" height="10" fill="#00AAA7"/>
+          <!-- Kachel 3: Steiner (wartet) -->
+          <rect x="720" y="112" rx="12" width="324" height="170" fill="#FFFFFF" stroke="#ED6B06"/>
+          <text x="744" y="152" font-size="19" font-weight="700" fill="#1f2329">Steiner</text>
+          <rect x="744" y="168" rx="12" width="130" height="24" fill="#fdf0e6"/>
+          <text x="754" y="185" font-size="12" font-weight="700" fill="#a84c04"><tspan class="de">Wartet auf Teile</tspan><tspan class="en">Waiting for parts</tspan><tspan class="fr">Attente pièces</tspan></text>
+          <text x="744" y="222" font-size="14" fill="#63656a"><tspan class="de">AT-2402 · Bremsleitung</tspan><tspan class="en">AT-2402 · Brake line</tspan><tspan class="fr">AT-2402 · Conduite de frein</tspan></text>
+          <rect x="744" y="240" rx="5" width="276" height="10" fill="#e3efec"/>
+          <rect x="744" y="240" rx="5" width="150" height="10" fill="#ED6B06"/>
+          <!-- Kachel 4: Wolf -->
+          <rect x="36" y="298" rx="12" width="324" height="170" fill="#FFFFFF" stroke="#e3efec"/>
+          <text x="60" y="338" font-size="19" font-weight="700" fill="#1f2329">Wolf</text>
+          <rect x="60" y="354" rx="12" width="86" height="24" fill="#e6f7f6"/>
+          <text x="70" y="371" font-size="12" font-weight="700" fill="#007977"><tspan class="de">In Arbeit</tspan><tspan class="en">In progress</tspan><tspan class="fr">En cours</tspan></text>
+          <text x="60" y="408" font-size="14" fill="#63656a"><tspan class="de">AT-2419 · Service 60.000 km</tspan><tspan class="en">AT-2419 · 60,000 km service</tspan><tspan class="fr">AT-2419 · Révision 60 000 km</tspan></text>
+          <rect x="60" y="426" rx="5" width="276" height="10" fill="#e3efec"/>
+          <rect x="60" y="426" rx="5" width="83" height="10" fill="#00AAA7"/>
+          <!-- Kachel 5: Egger (frei) -->
+          <rect x="378" y="298" rx="12" width="324" height="170" fill="#FFFFFF" stroke="#00AAA7" stroke-dasharray="7 5"/>
+          <text x="402" y="338" font-size="19" font-weight="700" fill="#1f2329">Egger</text>
+          <rect x="402" y="354" rx="12" width="56" height="24" fill="#e6f7f6"/>
+          <text x="412" y="371" font-size="12" font-weight="700" fill="#007977"><tspan class="de">Frei</tspan><tspan class="en">Free</tspan><tspan class="fr">Libre</tspan></text>
+          <text x="402" y="408" font-size="14" fill="#63656a"><tspan class="de">frei ab 13:30 · HV-qualifiziert</tspan><tspan class="en">free from 13:30 · HV-qualified</tspan><tspan class="fr">libre dès 13 h 30 · qualifié HV</tspan></text>
+          <rect x="402" y="426" rx="5" width="276" height="10" fill="#e3efec"/>
+          <!-- Kachel 6: Huber -->
+          <rect x="720" y="298" rx="12" width="324" height="170" fill="#FFFFFF" stroke="#e3efec"/>
+          <text x="744" y="338" font-size="19" font-weight="700" fill="#1f2329">Huber</text>
+          <rect x="744" y="354" rx="12" width="86" height="24" fill="#e6f7f6"/>
+          <text x="754" y="371" font-size="12" font-weight="700" fill="#007977"><tspan class="de">In Arbeit</tspan><tspan class="en">In progress</tspan><tspan class="fr">En cours</tspan></text>
+          <text x="744" y="408" font-size="14" fill="#63656a"><tspan class="de">AT-2424 · Klimaservice</tspan><tspan class="en">AT-2424 · A/C service</tspan><tspan class="fr">AT-2424 · Service clim</tspan></text>
+          <rect x="744" y="426" rx="5" width="276" height="10" fill="#e3efec"/>
+          <rect x="744" y="426" rx="5" width="152" height="10" fill="#00AAA7"/>
+        </g>
+        <!-- Handlungsbedarf-Streifen (Orange-Identity) -->
+        <rect x="36" y="492" rx="10" width="1008" height="48" fill="#fdf0e6" stroke="#ED6B06"/>
+        <text x="60" y="522" font-size="15" font-weight="700" fill="#a84c04"><tspan class="de">Handlungsbedarf: 2× Wartet auf Teile · 1× Klärung offen</tspan><tspan class="en">Action needed: 2× waiting for parts · 1× clarification pending</tspan><tspan class="fr">À traiter : 2× attente pièces · 1× clarification en attente</tspan></text>
+        <!-- Rundgang-Dots -->
+        <circle cx="500" cy="570" r="5" fill="#007977"/>
+        <circle cx="522" cy="570" r="5" fill="#b0e5e4"/>
+        <circle cx="544" cy="570" r="5" fill="#b0e5e4"/>
+        <text x="1044" y="575" font-size="13" fill="#63656a" text-anchor="end"><tspan class="de">Seite 1/3 · Rundgang alle 20 s</tspan><tspan class="en">Page 1/3 · tour every 20 s</tspan><tspan class="fr">Page 1/3 · rotation toutes les 20 s</tspan></text>
+      </svg>
+    </div>
+    <div class="tv-chips reveal d2">
+      <span class="chip"><span class="de">Ohne Kundennamen — Datenschutz</span><span class="en">No customer names — privacy</span><span class="fr">Sans noms de clients — protection des données</span></span>
+      <span class="chip"><span class="de">Ohne Personen-Ranking — Mitbestimmung</span><span class="en">No ranking of individuals — co-determination</span><span class="fr">Sans classement individuel — dialogue social</span></span>
+      <span class="chip"><span class="de">Umfang je Monitor konfigurierbar</span><span class="en">Scope configurable per monitor</span><span class="fr">Contenu configurable par écran</span></span>
+    </div>
+    <p class="tv-cap reveal d2"><span class="de">Illustrative Darstellung mit Beispieldaten — im Prototyp als Kiosk-Modus mit automatischem Rundgang enthalten.</span><span class="en">Illustration with sample data — included in the prototype as a kiosk mode with automatic tour.</span><span class="fr">Illustration avec des données d'exemple — incluse dans le prototype en mode kiosque avec rotation automatique.</span></p>
+  </div>
+</section>
+
+<!-- ============ 9 · TECHNOLOGIE (dunkel) ============ -->
+<section class="band darkband" id="technologie">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow reveal"><span class="de">Technologie</span><span class="en">Technology</span><span class="fr">Technologie</span></p>
+      <h2 class="reveal d1"><span class="de">Gebaut auf der movec-Plattform.</span><span class="en">Built on the movec platform.</span><span class="fr">Construit sur la plateforme movec.</span></h2>
+      <p class="lead reveal d2"><span class="de">workshopAssist ist keine Insellösung, sondern Teil des MATES-Ökosystems — <b>DMS-übergreifend und überall verfügbar</b>.</span><span class="en">workshopAssist is no isolated tool — it is part of the MATES ecosystem, <b>cross-DMS and available everywhere</b>.</span><span class="fr">workshopAssist n'est pas une solution isolée — il fait partie de l'écosystème MATES, <b>multi-DMS et disponible partout</b>.</span></p>
+    </div>
+    <div class="vm-cards">
+      <div class="vm-card reveal">
+        <p class="k"><span class="de">Integration</span><span class="en">Integration</span><span class="fr">Intégration</span></p>
+        <p><span class="de">Eine Datenquelle: das DMS.</span><span class="en">One data source: the DMS.</span><span class="fr">Une seule source de données : le DMS.</span></p>
+        <ul>
+          <li><span class="de">Angebunden über <b>connectAPI</b>, die movec-Integrationsplattform</span><span class="en">Connected via <b>connectAPI</b>, the movec integration platform</span><span class="fr">Connecté via <b>connectAPI</b>, la plateforme d'intégration movec</span></li>
+          <li><span class="de">DMS-übergreifend: <b>motionData und CDP</b> mit einer App</span><span class="en">Cross-DMS: <b>motionData and CDP</b> with one app</span><span class="fr">Multi-DMS : <b>motionData et CDP</b> avec une seule app</span></li>
+          <li><span class="de">Soll-Planung, Auftrags-Status und Ist-Zeiten aus dem Kernsystem</span><span class="en">Target plan, order status and actual times from the core system</span><span class="fr">Planification, statuts des ordres et temps réels issus du système central</span></li>
+          <li><span class="de">Live-Signal aus der Halle über techMate</span><span class="en">Live signal from the shop floor via techMate</span><span class="fr">Signal en direct de l'atelier via techMate</span></li>
+        </ul>
+      </div>
+      <div class="vm-card m2 reveal d1">
+        <p class="k"><span class="de">Plattform</span><span class="en">Platform</span><span class="fr">Plateforme</span></p>
+        <p><span class="de">Eine App für jede Fläche.</span><span class="en">One app for every screen.</span><span class="fr">Une app pour chaque écran.</span></p>
+        <ul>
+          <li><span class="de"><b>Progressive Web App</b> — Desktop, Tablet, Smartphone</span><span class="en"><b>Progressive web app</b> — desktop, tablet, smartphone</span><span class="fr"><b>Progressive Web App</b> — PC, tablette, smartphone</span></li>
+          <li><span class="de">Kiosk-Modus für den Werkstatt-TV</span><span class="en">Kiosk mode for the workshop TV</span><span class="fr">Mode kiosque pour l'écran d'atelier</span></li>
+          <li><span class="de">Zweisprachig <b>Deutsch / Englisch</b></span><span class="en">Bilingual <b>German / English</b></span><span class="fr">Bilingue <b>allemand / anglais</b></span></li>
+          <li><span class="de">Produktive DMS-Anbindung in Vorbereitung</span><span class="en">Production DMS connection in preparation</span><span class="fr">Connexion DMS productive en préparation</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10 · NUTZEN ============ -->
+<section class="band" id="nutzen">
+  <div class="wrap">
+    <div class="head" style="max-width:62ch">
+      <p class="eyebrow reveal"><span class="de">Der Nutzen</span><span class="en">The value</span><span class="fr">La valeur ajoutée</span></p>
+      <h2 class="reveal d1"><span class="de">Drei Rollen, ein gemeinsames Bild.</span><span class="en">Three roles, one shared picture.</span><span class="fr">Trois rôles, une image commune.</span></h2>
+    </div>
+    <div class="expect-grid n3">
+      <div class="panel cust reveal">
+        <p class="who"><span class="dot"></span><span class="de">Serviceleitung</span><span class="en">Service management</span><span class="fr">Direction du service</span></p>
+        <h3><span class="de">Echtzeit statt Schätzung</span><span class="en">Real time instead of guesswork</span><span class="fr">Du temps réel plutôt que des estimations</span></h3>
+        <p class="note"><span class="de">Plant den Tag und steuert die Annahme mit der tatsächlichen Auslastung vor Augen — und reagiert sofort, wenn Engpässe entstehen oder Kapazität frei wird.</span><span class="en">Plans the day and steers check-in with actual utilisation in view — and reacts immediately when bottlenecks emerge or capacity frees up.</span><span class="fr">Planifie la journée et pilote la réception avec la charge réelle sous les yeux — et réagit immédiatement quand un goulot apparaît ou qu'une capacité se libère.</span></p>
+      </div>
+      <div class="panel biz hl reveal d1">
+        <p class="who"><span class="dot"></span><span class="de">Werkstattmeister</span><span class="en">Workshop foreman</span><span class="fr">Chef d'atelier</span></p>
+        <h3><span class="de">Zuteilen ohne Zuruf</span><span class="en">Allocating without shouting</span><span class="fr">Affecter sans crier dans l'atelier</span></h3>
+        <p class="note"><span class="de">Sieht auf einen Blick, wer frei und wer qualifiziert ist — disponiert per Drag &amp; Drop oder übernimmt den geprüften KI-Vorschlag.</span><span class="en">Sees at a glance who is free and who is qualified — dispatches via drag &amp; drop or applies the reviewed AI suggestion.</span><span class="fr">Voit d'un coup d'œil qui est libre et qui est qualifié — affecte par glisser-déposer ou applique la proposition IA validée.</span></p>
+      </div>
+      <div class="panel gf reveal d2">
+        <p class="who"><span class="dot"></span><span class="de">Geschäftsführung</span><span class="en">General management</span><span class="fr">Direction générale</span></p>
+        <h3><span class="de">Transparenz über die Woche</span><span class="en">Transparency across the week</span><span class="fr">Transparence sur la semaine</span></h3>
+        <p class="note"><span class="de">Auslastung und Produktivität werden messbar — als Grundlage für Personaleinsatz, Annahmesteuerung und Investitionsentscheidungen.</span><span class="en">Utilisation and productivity become measurable — as a basis for staffing, check-in steering and investment decisions.</span><span class="fr">La charge et la productivité deviennent mesurables — une base pour les effectifs, le pilotage de la réception et les décisions d'investissement.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 11 · CLOSING ============ -->
+<section class="band closing" id="abschluss">
+  <div class="wrap">
+    <p class="eyebrow reveal"><span class="de">Ausblick</span><span class="en">Outlook</span><span class="fr">Perspectives</span></p>
+    <h2 class="reveal d1"><span class="de">Die Magnettafel hat ausgedient.</span><span class="en">The magnetic board has had its day.</span><span class="fr">Le tableau magnétique a fait son temps.</span></h2>
+    <p class="thesis reveal d2"><span class="de"><b>workshopAssist disponiert, techMate arbeitet ab.</b> Der klickbare Prototyp ist fertig und zeigt alle fünf Module im Zusammenspiel — die beste Sicht darauf ist eine Live-Demo im Gespräch.</span><span class="en"><b>workshopAssist dispatches, techMate executes.</b> The clickable prototype is ready and shows all five modules working together — the best way to see it is a live demo in person.</span><span class="fr"><b>workshopAssist planifie, techMate exécute.</b> Le prototype cliquable est prêt et montre les cinq modules en interaction — la meilleure façon de le découvrir est une démo en direct.</span></p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="movec">
+      <svg class="mark-full" viewBox="110 134 1360 440" width="124" height="40" style="--lg:#C9D4D3" role="img"><use href="#mv-logo"/></svg>
+    </a>
+    <span class="prods">workshopAssist · movec MATES</span>
+    <span>© 2026 movec · <a class="legal" href="https://movec.com/impressum/" target="_blank" rel="noopener">Impressum</a> · <a class="legal" href="https://movec.com/wer-wir-sind/datenschutzerklaerung/" target="_blank" rel="noopener">Datenschutz</a></span>
+  </div>
+</footer>
+
+<script>
+  /* ----- Mehrsprachigkeit DE/EN/FR: body.l-* schaltet die Span-Tripletts ----- */
+  (function () {
+    var LANGS = ['de', 'en', 'fr'];
+    var btns = Array.prototype.slice.call(document.querySelectorAll('.lang button'));
+    function setLang(l) {
+      if (LANGS.indexOf(l) < 0) l = 'de';
+      LANGS.forEach(function (k) { document.body.classList.remove('l-' + k); });
+      document.body.classList.add('l-' + l);
+      document.documentElement.lang = l;
+      btns.forEach(function (b) {
+        var on = b.getAttribute('data-lang') === l;
+        b.classList.toggle('active', on);
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+      try { localStorage.setItem('pitch-lang', l); } catch (e) {}
+      document.dispatchEvent(new CustomEvent('pitchlang', { detail: l }));
+    }
+    window.getPitchLang = function () {
+      var m = document.body.className.match(/l-(de|en|fr)/);
+      return m ? m[1] : 'de';
+    };
+    btns.forEach(function (b) { b.addEventListener('click', function () { setLang(b.getAttribute('data-lang')); }); });
+    var saved = null;
+    try { saved = localStorage.getItem('pitch-lang'); } catch (e) {}
+    if (saved && saved !== 'de') setLang(saved);
+  })();
+</script>
+<script>
+  (function () {
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ----- Kennzahlen hochzählen (data-count) ----- */
+    document.body.classList.add('loaded');
+    if (!reduce) {
+      Array.prototype.slice.call(document.querySelectorAll('[data-count]')).forEach(function (el) {
+        var target = parseInt(el.getAttribute('data-count'), 10);
+        if (!target) return;
+        /* rAF friert in Hintergrund-Tabs ein — dann direkt Endwert zeigen */
+        if (document.hidden) { el.textContent = String(target); return; }
+        var dur = 1400, t0 = null, done = false;
+        el.textContent = '0';
+        function tick(ts) {
+          if (done) return;
+          if (t0 === null) t0 = ts;
+          var p = Math.min(1, (ts - t0) / dur);
+          var eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = String(Math.round(target * eased));
+          if (p < 1) requestAnimationFrame(tick); else done = true;
+        }
+        requestAnimationFrame(tick);
+        setTimeout(function () { if (!done) { done = true; el.textContent = String(target); } }, dur + 800);
+      });
+    }
+
+    /* ----- Scroll-Reveals ----- */
+    var els = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+    if (!('IntersectionObserver' in window) || reduce) {
+      els.forEach(function (e) { e.classList.add('in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    }, { threshold: 0.16, rootMargin: '0px 0px -8% 0px' });
+    els.forEach(function (e) { io.observe(e); });
+  })();
+</script>
+<script>
+  /* ----- Präsentationsmodus: Pfeiltasten/Leertaste/Clicker + Kapitel-Dots -----
+     labels: je Sprache EIN Label pro <section>, gleiche Reihenfolge wie im Dokument! */
+  (function () {
+    var sections = Array.prototype.slice.call(document.querySelectorAll('section'));
+    if (!sections.length) return;
+    var labels = {
+      de: ['Start', 'Das Problem', 'Warum movec', 'Architektur', 'Module', 'KI-Planung', 'Produkt', 'Monitor', 'Technologie', 'Nutzen', 'Abschluss'],
+      en: ['Start', 'The problem', 'Why movec', 'Architecture', 'Modules', 'AI planning', 'Product', 'Monitor', 'Technology', 'Value', 'Closing'],
+      fr: ['Début', 'Le problème', 'Pourquoi movec', 'Architecture', 'Modules', 'Planification IA', 'Produit', 'Moniteur', 'Technologie', 'Valeur', 'Conclusion']
+    };
+    var hints = {
+      de: 'Präsentieren: ◀ ▶ oder Leertaste',
+      en: 'Present: ◀ ▶ or space bar',
+      fr: 'Présenter : ◀ ▶ ou barre d’espace'
+    };
+    function lang() { return window.getPitchLang ? window.getPitchLang() : 'de'; }
+    var dotsNav = document.createElement('nav');
+    dotsNav.className = 'dots';
+    dotsNav.setAttribute('aria-label', 'Abschnitte');
+    var dots = sections.map(function (sec, i) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.addEventListener('click', function () { go(i); });
+      dotsNav.appendChild(b);
+      return b;
+    });
+    function applyLabels() {
+      var L = labels[lang()] || labels.de;
+      dots.forEach(function (b, i) {
+        var t = L[i] || 'Abschnitt ' + (i + 1);
+        b.setAttribute('data-label', t);
+        b.setAttribute('aria-label', t);
+      });
+    }
+    applyLabels();
+    document.body.appendChild(dotsNav);
+    var current = 0;
+    if ('IntersectionObserver' in window) {
+      var spy = new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          if (e.isIntersecting) {
+            current = sections.indexOf(e.target);
+            dots.forEach(function (b, i) { b.classList.toggle('on', i === current); });
+          }
+        });
+      }, {rootMargin: '-45% 0px -45% 0px'});
+      sections.forEach(function (s) { spy.observe(s); });
+    }
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function go(i) {
+      i = Math.max(0, Math.min(sections.length - 1, i));
+      current = i;
+      dots.forEach(function (b, k) { b.classList.toggle('on', k === i); });
+      sections[i].scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block: 'start'});
+    }
+    document.addEventListener('keydown', function (ev) {
+      if (ev.altKey || ev.ctrlKey || ev.metaKey) return;
+      var t = ev.target;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+      if (ev.key === 'ArrowRight' || ev.key === 'PageDown' || (ev.key === ' ' && !ev.shiftKey)) { ev.preventDefault(); go(current + 1); }
+      else if (ev.key === 'ArrowLeft' || ev.key === 'PageUp' || (ev.key === ' ' && ev.shiftKey)) { ev.preventDefault(); go(current - 1); }
+      else if (ev.key === 'Home') { ev.preventDefault(); go(0); }
+      else if (ev.key === 'End') { ev.preventDefault(); go(sections.length - 1); }
+    });
+    var hint = document.createElement('div');
+    hint.className = 'kbd-hint';
+    hint.textContent = hints[lang()] || hints.de;
+    document.body.appendChild(hint);
+    setTimeout(function () { hint.classList.add('hide'); }, 8000);
+    /* Sprachwechsel: Dots-Labels + Hinweis mitschalten */
+    document.addEventListener('pitchlang', function () {
+      applyLabels();
+      hint.textContent = hints[lang()] || hints.de;
+    });
+  })();
+</script>
+</body>
+</html>
