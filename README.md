@@ -84,3 +84,23 @@ abgeleitet. Die Zuordnung Produkt → Service-Center-Doku ist in
 [`docs/SERVICE-CENTER-QUELLEN.md`](docs/SERVICE-CENTER-QUELLEN.md)
 dokumentiert; sie ist die Grundlage für einen späteren Build-Sync und wird
 aktuell nur für die Doku-Buttons im Hub genutzt.
+
+## Umzug der alten Einzel-Repos
+
+Schon verschickte Links zeigen auf die alten Repos
+(`daku83.github.io/<produkt>-pitch/`). `scripts/make-redirects.mjs` legt dort
+eine Weiterleitungsseite auf die neue Adresse an:
+
+```bash
+node scripts/make-redirects.mjs                                    # Vorschau
+node scripts/make-redirects.mjs --write                            # schreibt
+node scripts/make-redirects.mjs --write --base https://demos.movec.services
+```
+
+Das Skript überschreibt die `index.html` im jeweiligen alten Repo-Ordner; die
+Inhalte bleiben dort in der Git-Historie erhalten. Die Repos müssen danach
+einzeln committet und gepusht werden.
+
+Sobald die Custom Domain steht, das Skript mit `--base` auf die neue Domain
+erneut laufen lassen — dann zeigen die Weiterleitungen nicht mehr auf
+`github.io`.
