@@ -44,7 +44,6 @@ bewusst *nicht* ausgelagert.
 /                     neutrale Landing + 404
 /hub/index.html       Demo-Hub (Katalog im CATALOG-Array am Dateiende)
 /<produkt>/index.html je eine Produktpräsentation
-/docs/                Betriebs- und Quellen-Dokumentation
 ```
 
 ## Pflege
@@ -74,16 +73,17 @@ Wurzelrelative Pfade (`/techmate/`) würden im zweiten Fall brechen.
 Push auf `main` → GitHub Actions (`.github/workflows/deploy.yml`) → Pages.
 `.nojekyll` verhindert die Jekyll-Verarbeitung.
 
-Ziel-Domain und die geplante Absicherung des Hubs: siehe
-[`docs/IT-TICKET.md`](docs/IT-TICKET.md).
+Ziel-Domain und die geplante Absicherung des Hubs stehen in den internen
+Notizen neben diesem Repo (`../movec-demos-notizen/IT-TICKET.md`) — absichtlich
+nicht hier, weil dieses Repo öffentlich ist.
 
 ## Inhaltsquellen
 
 Die Seiteninhalte sind derzeit **händisch** gepflegt und *nicht* aus Confluence
-abgeleitet. Die Zuordnung Produkt → Service-Center-Doku ist in
-[`docs/SERVICE-CENTER-QUELLEN.md`](docs/SERVICE-CENTER-QUELLEN.md)
-dokumentiert; sie ist die Grundlage für einen späteren Build-Sync und wird
-aktuell nur für die Doku-Buttons im Hub genutzt.
+abgeleitet. Die `doku`-Felder im `CATALOG` zeigen auf den Confluence-Space
+`DOK` („Service Center"). Die vollständige Zuordnung Produkt → Seiten-ID liegt
+in den internen Notizen neben diesem Repo
+(`../movec-demos-notizen/SERVICE-CENTER-QUELLEN.md`).
 
 ## Umzug der alten Einzel-Repos
 
