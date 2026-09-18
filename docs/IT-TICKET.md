@@ -59,7 +59,12 @@ Das Repo soll einer **Firmen-GitHub-Organisation** gehören, nicht einem
 privaten Account. Solange es privat gehostet ist, hängen alle Vertriebslinks an
 einer Einzelperson.
 
-Wichtig für die Reihenfolge: **erst Schritt 1, dann der Transfer.** Sobald die
-Seiten unter `demos.movec.services` laufen, ändert ein Repo-Transfer keine
-einzige verschickte URL. Ohne Custom Domain würden beim Transfer alle Links
-brechen — GitHub leitet Pages-URLs nach einem Ownership-Wechsel **nicht** weiter.
+**Reihenfolge:** Stand 18.09.2026 sind noch **keine** Links im Umlauf — die
+Site ist bisher nur dem Ersteller bekannt. Der Transfer kann deshalb **sofort
+und ohne Rücksicht auf bestehende URLs** erfolgen, auch vor Schritt 1.
+
+Das ändert sich, sobald Links verschickt werden: GitHub leitet Pages-URLs nach
+einem Ownership-Wechsel **nicht** weiter. Ab dann gilt: **erst Schritt 1, dann
+der Transfer** — unter `demos.movec.services` ändert ein Transfer keine
+einzige verschickte URL. Am saubersten ist deshalb, den Transfer **jetzt** zu
+machen, solange er nichts kostet.

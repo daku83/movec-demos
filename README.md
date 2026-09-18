@@ -87,7 +87,12 @@ aktuell nur für die Doku-Buttons im Hub genutzt.
 
 ## Umzug der alten Einzel-Repos
 
-Schon verschickte Links zeigen auf die alten Repos
+**Derzeit nicht nötig** — es sind keine Links im Umlauf, die alten Adressen sind
+nur dem Ersteller bekannt. Das Skript bleibt für den Fall, dass später Links
+verschickt wurden und sich die Adresse noch einmal ändert (z. B. bei der
+Umstellung auf die Custom Domain).
+
+Es zeigt auf die alten Repos
 (`daku83.github.io/<produkt>-pitch/`). `scripts/make-redirects.mjs` legt dort
 eine Weiterleitungsseite auf die neue Adresse an:
 
