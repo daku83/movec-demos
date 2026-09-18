@@ -88,7 +88,8 @@
   .grid {
     margin-top: 18px;
     display: grid; gap: 16px;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    /* 280px, damit „Demo öffnen“ und „Präsentation“ in einer Zeile bleiben */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   }
   .card {
     display: flex; flex-direction: column;
@@ -116,8 +117,14 @@
   .btn.solid:hover { background: var(--orange-dk); }
   .btn.ghost { border-color: var(--line); color: var(--ink); background: var(--paper); }
   .btn.ghost:hover { border-color: var(--teal); color: var(--teal-dk); }
-  .btn.doc { border-color: transparent; background: transparent; color: var(--ink-2); padding-left: 8px; padding-right: 8px; }
-  .btn.doc:hover { color: var(--teal-dk); background: var(--paper-2); }
+  .doclink {
+    flex-basis: 100%; margin-top: 4px;
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 13px; font-weight: 600; text-decoration: none;
+    color: var(--teal-dk); transition: color .15s ease;
+  }
+  .doclink::after { content: "→"; font-weight: 400; }
+  .doclink:hover { color: var(--teal); text-decoration: underline; }
   .soon {
     font-size: 12.5px; font-weight: 600; color: var(--grey-mark);
     background: var(--paper-2); border: 1px dashed var(--line);
@@ -285,7 +292,7 @@ const UI = {
   hint:    { de: "🔒 <span><b>Interne Seite</b> – für Kundentermine gedacht, bitte nicht öffentlich verlinken.</span>", en: "🔒 <span><b>Internal page</b> – intended for customer meetings, please don't link publicly.</span>" },
   demoBtn: { de: "Demo öffnen", en: "Open demo" },
   pitchBtn:{ de: "Präsentation", en: "Presentation" },
-  docBtn:  { de: "Doku", en: "Docs" },
+  docBtn:  { de: "Doku im Service Center", en: "Docs in the Service Center" },
   demoSoon:{ de: "Demo folgt", en: "Demo to follow" },
   imprint: { de: "Impressum", en: "Imprint" },
   privacy: { de: "Datenschutz", en: "Privacy" }
@@ -321,7 +328,7 @@ function render() {
       const actions = [
         p.demo  ? `<a class="btn solid" href="${p.demo}" target="_blank" rel="noopener">${t(UI.demoBtn)}</a>` : "",
         p.pitch ? `<a class="btn ${p.demo ? "ghost" : "solid"}" href="${p.pitch}" target="_blank" rel="noopener">${t(UI.pitchBtn)}</a>` : "",
-        p.doku  ? `<a class="btn doc" href="${p.doku}" target="_blank" rel="noopener">${t(UI.docBtn)}</a>` : "",
+        p.doku  ? `<a class="doclink" href="${p.doku}" target="_blank" rel="noopener">${t(UI.docBtn)}</a>` : "",
         p.status || (!p.demo && !p.pitch) ? `<span class="soon">${t(p.status) || t(UI.demoSoon)}</span>` : ""
       ].join("");
       card.innerHTML = `<h3>${t(p.name)}</h3><p>${t(p.desc)}</p><div class="row">${actions}</div>`;
